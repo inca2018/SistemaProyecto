@@ -2,10 +2,10 @@
 
 class Conexion {
    public function ruta(){
-      return "http://localhost/ucv/SistemaCobranza/app/";
+      return "http://localhost/ucv/SistemaProyecto/app/";
    }
    public function rutaOP(){
-      return "http://localhost/ucv/SistemaCobranza/app/Gestion/";
+      return "http://localhost/ucv/SistemaProyecto/app/Gestion/";
    }
    public function convertir($string){
 	   $cant=strlen($string);
