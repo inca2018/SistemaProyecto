@@ -1,23 +1,23 @@
-var tablaUsuario;
+var tablaSubTarea;
 function init(){
+    var idTarea=$("#idTareaE").val();
     Iniciar_Componentes();
+    Listar_SubTarea(idTarea);
     Listar_Estado();
 
-    Listar_Perfiles();
-    Listar_Usuario();
 }
 function Iniciar_Componentes(){
    //var fecha=hoyFecha();
 
 	//$('#date_fecha_comprobante').datepicker('setDate',fecha);
 
-    $("#FormularioUsuario").on("submit",function(e)
+    $("#FormularioSubTarea").on("submit",function(e)
 	{
-	      RegistroUsuario(e);
+	      RegistroSubTarea(e);
 	});
 
 }
-function RegistroUsuario(event){
+function RegistroSubTarea(event){
 	  //cargar(true);
 	event.preventDefault(); //No se activará la acción predeterminada del evento
     var error="";
@@ -29,18 +29,18 @@ function RegistroUsuario(event){
     });
 
     if(error==""){
-		$("#ModalUsuario #cuerpo").addClass("whirl");
-		$("#ModalUsuario #cuerpo").addClass("ringed");
-		setTimeout('AjaxRegistroUsuario()', 2000);
+		$("#ModalSubTarea #cuerpo").addClass("whirl");
+		$("#ModalSubTarea #cuerpo").addClass("ringed");
+		setTimeout('AjaxRegistroSubTarea()', 2000);
 	}else{
  		notificar_warning("Complete :<br>"+error);
 	}
 }
-function AjaxRegistroUsuario(){
-    var formData = new FormData($("#FormularioUsuario")[0]);
+function AjaxRegistroSubTarea(){
+    var formData = new FormData($("#FormularioSubTarea")[0]);
 		console.log(formData);
 		$.ajax({
-			url: "../../controlador/Mantenimiento/CUsuario.php?op=AccionUsuario",
+			url: "../../controlador/Mantenimiento/CSubTarea.php?op=AccionSubTarea",
 			 type: "POST",
 			 data: formData,
 			 contentType: false,
@@ -52,42 +52,36 @@ function AjaxRegistroUsuario(){
 					var Mensaje=data.Mensaje;
 				 	var Error=data.Registro;
 					if(!Error){
-						$("#ModalUsuario #cuerpo").removeClass("whirl");
-						$("#ModalUsuario #cuerpo").removeClass("ringed");
-						$("#ModalUsuario").modal("hide");
+						$("#ModalSubTarea #cuerpo").removeClass("whirl");
+						$("#ModalSubTarea #cuerpo").removeClass("ringed");
+						$("#ModalSubTarea").modal("hide");
 						swal("Error:", Mensaje);
-						LimpiarUsuario();
-						tablaUsuario.ajax.reload();
+						LimpiarSubTarea();
+						tablaSubTarea.ajax.reload();
 					}else{
-						$("#ModalUsuario #cuerpo").removeClass("whirl");
-						$("#ModalUsuario #cuerpo").removeClass("ringed");
-						$("#ModalUsuario").modal("hide");
+						$("#ModalSubTarea #cuerpo").removeClass("whirl");
+						$("#ModalSubTarea #cuerpo").removeClass("ringed");
+						$("#ModalSubTarea").modal("hide");
 					   swal("Acción:", Mensaje);
-						LimpiarUsuario();
-						tablaUsuario.ajax.reload();
+						LimpiarSubTarea();
+						tablaSubTarea.ajax.reload();
 					}
 			 }
 		});
 }
 function Listar_Estado(){
-	 $.post("../../controlador/Mantenimiento/CUsuario.php?op=listar_estados", function (ts) {
-      $("#UsuarioEstado").append(ts);
+	 $.post("../../controlador/Mantenimiento/CSubTarea.php?op=listar_estados", function (ts) {
+      $("#SubTareaEstado").append(ts);
    });
 }
 function Listar_Personas(){
-	 $.post("../../controlador/Mantenimiento/CUsuario.php?op=listar_personas_sin_usuario", function (ts) {
-        $("#UsuarioPersona").empty();
-		 $("#UsuarioPersona").append(ts);
+	 $.post("../../controlador/Mantenimiento/CSubTarea.php?op=listar_personas", function (ts) {
+      $("#SubTareaPersona").append(ts);
    });
 }
+function Listar_SubTarea(idTarea){
 
-function Listar_Perfiles(){
-	 $.post("../../controlador/Mantenimiento/CUsuario.php?op=listar_perfiles", function (ts) {
-      $("#UsuarioPerfil").append(ts);
-   });
-}
-function Listar_Usuario(){
-	tablaUsuario = $('#tablaUsuario').dataTable({
+	tablaSubTarea = $('#tablaSubTarea').dataTable({
 		"aProcessing": true,
 		"aServerSide": true,
 		"processing": true,
@@ -95,14 +89,14 @@ function Listar_Usuario(){
 		"ordering": true, // Ordenamiento en columna de tabla
 		"info": true, // Informacion de cabecera tabla
 		"responsive": true, // Accion de responsive
-        dom: 'lBfrtip',
+	  dom: 'lBfrtip',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
           "order": [[0, "asc"]],
 		"bDestroy": true
         , "columnDefs": [
             {
                "className": "text-center"
-               , "targets": [1,2,3,4,5,6]
+               , "targets": [1,2]
             }
             , {
                "className": "text-left"
@@ -134,20 +128,20 @@ function Listar_Usuario(){
             }
             ],
           "ajax": { //Solicitud Ajax Servidor
-			url: '../../controlador/Mantenimiento/CUsuario.php?op=Listar_Usuario',
+			url: '../../controlador/Mantenimiento/CSubTarea.php?op=Listar_SubTarea',
 			type: "POST",
 			dataType: "JSON",
+            data:{idTareaE:idTarea},
 			error: function (e) {
 				console.log(e.responseText);
 			}
-		 },
-
+		},
 		// cambiar el lenguaje de datatable
 		oLanguage: español,
 	}).DataTable();
 	//Aplicar ordenamiento y autonumeracion , index
-	tablaUsuario.on('order.dt search.dt', function () {
-		tablaUsuario.column(0, {
+	tablaSubTarea.on('order.dt search.dt', function () {
+		tablaSubTarea.column(0, {
 			search: 'applied',
 			order: 'applied'
 		}).nodes().each(function (cell, i) {
@@ -155,61 +149,57 @@ function Listar_Usuario(){
 		});
 	}).draw();
 }
-function NuevoUsuario(){
-    $("#ModalUsuario").modal({
+function NuevoSubTarea(){
+    $("#ModalSubTarea").modal({
       backdrop: 'static'
       , keyboard: false
     });
-    $("#ModalUsuario").modal("show");
-    $("#tituloModalUsuario").empty();
-    $("#tituloModalUsuario").append("Nuevo Usuario:");
-    Listar_Personas();
+    $("#ModalSubTarea").modal("show");
+    $("#tituloModalSubTarea").empty();
+    $("#tituloModalSubTarea").append("Nuevo SubTarea:");
 }
-function EditarUsuario(idUsuario){
-    $("#ModalUsuario").modal({
+function EditarSubTarea(idSubTarea){
+    $("#ModalSubTarea").modal({
       backdrop: 'static'
       , keyboard: false
     });
-    $("#ModalUsuario").modal("show");
-    $("#tituloModalUsuario").empty();
-    $("#tituloModalUsuario").append("Editar Usuario:");
-	RecuperarUsuario(idUsuario);
+    $("#ModalSubTarea").modal("show");
+    $("#tituloModalSubTarea").empty();
+    $("#tituloModalSubTarea").append("Editar SubTarea:");
+	RecuperarSubTarea(idSubTarea);
 }
-function RecuperarUsuario(idUsuario){
+function RecuperarSubTarea(idSubTarea){
 	//solicitud de recuperar Proveedor
-	$.post("../../controlador/Mantenimiento/CUsuario.php?op=RecuperarInformacion_Usuario",{"idUsuario":idUsuario}, function(data, status){
+	$.post("../../controlador/Mantenimiento/CSubTarea.php?op=RecuperarInformacion_SubTarea",{"idSubTarea":idSubTarea}, function(data, status){
 		data = JSON.parse(data);
-		$.post("../../controlador/Mantenimiento/CUsuario.php?op=listar_personas_todo", function (ts) {
-		$("#UsuarioPersona").empty();
-		$("#UsuarioPersona").append(ts);
+		console.log(data);
 
-		$("#UsuarioPersona").attr("disabled","true");
-		$("#idUsuario").val(data.idUsuario);
-		$("#UsuarioPersona").val(data.Persona_idPersona);
-		$("#UsuarioUsuario").val(data.usuario);
-		$("#UsuarioPerfil").val(data.Perfil_idPerfil);
-		$("#UsuarioPassword").val("");
-		$("#UsuarioPassword").removeClass("validarPanel");
-		$("#UsuarioEstado").val(data.Estado_idEstado);
-		 });
+        $("#idSubTarea").val(data.idSubTarea);
+        $("#SubTareaNombre").val(data.NombreSubTarea);
+        $("#SubTareaHoras").val(data.CantidadHora);
+        $("#SubTareaDescripcion").val(data.Descripcion);
+
+        $("#SubTareaEstado").val(data.Estado_idEstado);
+
 
 	});
 }
-function EliminarUsuario(idUsuario){
+
+function EliminarSubTarea(idSubTarea){
       swal({
       title: "Eliminar?",
-      text: "Esta Seguro que desea Eliminar Usuario!",
+      text: "Esta Seguro que desea Eliminar SubTarea!",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Si, Eliminar!",
       closeOnConfirm: false
    }, function () {
-      ajaxEliminarUsuario(idUsuario);
+      ajaxEliminarSubTarea(idSubTarea);
    });
 }
-function ajaxEliminarUsuario(idUsuario){
-    $.post("../../controlador/Mantenimiento/CUsuario.php?op=Eliminar_Usuario", {idUsuario: idUsuario}, function (data, e) {
+function ajaxEliminarSubTarea(idSubTarea){
+    $.post("../../controlador/Mantenimiento/CSubTarea.php?op=Eliminar_SubTarea", {idSubTarea: idSubTarea}, function (data, e) {
       data = JSON.parse(data);
       var Error = data.Error;
       var Mensaje = data.Mensaje;
@@ -217,25 +207,25 @@ function ajaxEliminarUsuario(idUsuario){
          swal("Error", Mensaje, "error");
       } else {
          swal("Eliminado!", Mensaje, "success");
-         tablaUsuario.ajax.reload();
+         tablaSubTarea.ajax.reload();
       }
    });
 }
-function HabilitarUsuario(idUsuario){
+function HabilitarSubTarea(idSubTarea){
       swal({
       title: "Habilitar?",
-      text: "Esta Seguro que desea Habilitar Usuario!",
+      text: "Esta Seguro que desea Habilitar SubTarea!",
       type: "info",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Si, Habilitar!",
       closeOnConfirm: false
    }, function () {
-      ajaxHabilitarUsuario(idUsuario);
+      ajaxHabilitarSubTarea(idSubTarea);
    });
 }
-function ajaxHabilitarUsuario(idUsuario){
-       $.post("../../controlador/Mantenimiento/CUsuario.php?op=Recuperar_Usuario", {idUsuario: idUsuario}, function (data, e) {
+function ajaxHabilitarSubTarea(idSubTarea){
+       $.post("../../controlador/Mantenimiento/CSubTarea.php?op=Recuperar_SubTarea", {idSubTarea: idSubTarea}, function (data, e) {
       data = JSON.parse(data);
       var Error = data.Error;
       var Mensaje = data.Mensaje;
@@ -243,20 +233,24 @@ function ajaxHabilitarUsuario(idUsuario){
          swal("Error", Mensaje, "error");
       } else {
          swal("Eliminado!", Mensaje, "success");
-         tablaUsuario.ajax.reload();
+         tablaSubTarea.ajax.reload();
       }
    });
 }
-function LimpiarUsuario(){
-   $('#FormularioUsuario')[0].reset();
-	$("#idUsuario").val("");
-	$("#UsuarioPersona").removeAttr("disabled");
-	$("#UsuarioPassword").addClass("validarPanel");
+function LimpiarSubTarea(){
+   $('#FormularioSubTarea')[0].reset();
+	$("#idSubTarea").val("");
+
 }
 function Cancelar(){
-    LimpiarUsuario();
-    $("#ModalUsuario").modal("hide");
-
+    LimpiarSubTarea();
+    $("#ModalSubTarea").modal("hide");
 }
-
+function SubSubTareas(idSubTarea){
+     $.redirect('MantSubSubTarea.php', {'idSubTarea':idSubTarea});
+}
+function Volver(){
+     var idProyecto=$("#idProyecto").val();
+     $.redirect('MantTarea.php',{'idProyecto':idProyecto});
+}
 init();

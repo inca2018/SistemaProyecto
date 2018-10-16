@@ -1,5 +1,6 @@
 <body class="layout-fixedaside-hover offsidebar-open layout-fixed aside-collapsed aside-collapsed-text">
    <div class="wrapper">
+
       <!-- top navbar-->
       <header class="topnavbar-wrapper">
          <!-- START Top Navbar-->
@@ -50,43 +51,7 @@
                      <div class="dropdown-item">
                         <!-- START list group-->
                         <div class="list-group">
-                        <?php //if($_SESSION['Rol']=='Administrador'):?>
-                           <!-- list item
-                           <div class="list-group-item list-group-item-action">
-                              <div class="media" id="IdQsOperaciones">
-                                 <div class="align-self-start mr-2">
-                                    <em class="fa fa-cog fa-2x text-info"></em>
-                                 </div>
-                                 <div class="media-body">
-                                    <p class="m-0">QS Operaciones</p>
-                                    <p class="m-0 text-muted text-sm">Systema de Operaciones</p>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="list-group-item list-group-item-action">
-                              <div class="media" id="IdQsFinanzas">
-                                 <div class="align-self-start mr-2">
-                                    <em class="fa fa-area-chart fa-2x text-warning"></em>
-                                 </div>
-                                 <div class="media-body">
-                                    <p class="m-0">QS Finanzas</p>
-                                    <p class="m-0 text-muted text-sm">Systema de Finanzas</p>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="list-group-item list-group-item-action">
-                              <div class="media" id="IdQsRRHH">
-                                 <div class="align-self-start mr-2">
-                                    <em class="fa fa-child fa-2x text-primary"></em>
-                                 </div>
-                                 <div class="media-body">
-                                    <p class="m-0">QS RRHH</p>
-                                    <p class="m-0 text-muted text-sm">Systema de Recurso Humanos</p>
-                                 </div>
-                              </div>
-                           </div>-->
-                        <?php //else:;?>
-                        <?php //endif;?>
+
                            <div class="list-group-item list-group-item-action">
                               <div class="media" onclick="PerfilUsuarioOperaciones();">
                                  <div class="align-self-start mr-2">
@@ -136,12 +101,15 @@
                   <li class="nav-heading ">
                      <span data-localize="sidebar.heading.HEADER">Menu de Navegación</span>
                   </li>
+                   <?php if(isset($_SESSION['permiso1'])){ if($_SESSION['permiso1']=='1' || $_SESSION['permiso1']==1){ ?>
                   <li id="Menu" class="">
                      <a href="<?php echo  $conexionConfig->rutaOP().'vista/Menu/Menu.php';?>" title="Inicio">
                         <em class="fa fa-home  fa-lg"></em>
                         <span data-localize="sidebar.nav.SINGLEVIEW">Menu</span>
                      </a>
                   </li>
+                   <?php  }}else{ };?>
+                  <?php if(isset($_SESSION['permiso1'])){ if($_SESSION['permiso1']=='1' || $_SESSION['permiso1']==1){ ?>
                   <li id="MGestion" class=" ">
                      <a id="level0" href="#multilevelOperaciones" title="Multilevel" data-toggle="collapse">
                         <em class="fa fa-cogs fa-lg"></em>
@@ -157,7 +125,8 @@
 
                      </ul>
                   </li>
-
+                  <?php  }}else{ };?>
+                  <?php if(isset($_SESSION['permiso2'])){ if($_SESSION['permiso2']=='1' || $_SESSION['permiso2']==1){ ?>
                   <li id="MPersonal" class=" ">
                      <a id="level0" href="#multilevelColaborador" title="Multilevel" data-toggle="collapse">
                         <em class="fa fa-briefcase  fa-lg"></em>
@@ -180,9 +149,21 @@
                               <span> Personas </span>
                            </a>
                         </li>
+                        <li id="" class="">
+                           <a href="<?php echo  $conexionConfig->rutaOP().'vista/Mantenimiento/MantCliente.php';?>" title="Clientes">
+                              <span> Cliente </span>
+                           </a>
+                        </li>
+                         <li id="" class="">
+                           <a href="<?php echo  $conexionConfig->rutaOP().'vista/Mantenimiento/MantProyecto.php';?>" title="Proyectos">
+                              <span> Proyecto </span>
+                           </a>
+                        </li>
+
                      </ul>
                   </li>
-
+                  <?php  }}else{ };?>
+                  <?php if(isset($_SESSION['permiso3'])){ if($_SESSION['permiso3']=='1' || $_SESSION['permiso3']==1){ ?>
                   <li id="Servicios" class=" ">
                      <a id="level0" href="#multilevelServicios" title="Multilevel" data-toggle="collapse">
                         <em class="fa fa-chart-bar fa-lg"></em>
@@ -203,6 +184,7 @@
 
                      </ul>
                   </li>
+                  <?php }}else{ };?>
                </ul>
                <!-- END sidebar nav-->
             </nav>

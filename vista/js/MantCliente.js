@@ -1,7 +1,7 @@
-var tablaPerfil;
+var tablaCliente;
 function init(){
    Iniciar_Componentes();
-   Listar_Perfil();
+   Listar_Cliente();
 	Listar_Estado();
 }
 function Iniciar_Componentes(){
@@ -9,13 +9,13 @@ function Iniciar_Componentes(){
 
 	//$('#date_fecha_comprobante').datepicker('setDate',fecha);
 
-    $("#FormularioPerfil").on("submit",function(e)
+    $("#FormularioCliente").on("submit",function(e)
 	{
-	      RegistroPerfil(e);
+	      RegistroCliente(e);
 	});
 
 }
-function RegistroPerfil(event){
+function RegistroCliente(event){
 	  //cargar(true);
 	event.preventDefault(); //No se activará la acción predeterminada del evento
     var error="";
@@ -27,18 +27,18 @@ function RegistroPerfil(event){
     });
 
     if(error==""){
-		$("#ModalPerfil #cuerpo").addClass("whirl");
-		$("#ModalPerfil #cuerpo").addClass("ringed");
-		setTimeout('AjaxRegistroPerfil()', 2000);
+		$("#ModalCliente #cuerpo").addClass("whirl");
+		$("#ModalCliente #cuerpo").addClass("ringed");
+		setTimeout('AjaxRegistroCliente()', 2000);
 	}else{
  		notificar_warning("Complete :<br>"+error);
 	}
 }
-function AjaxRegistroPerfil(){
-    var formData = new FormData($("#FormularioPerfil")[0]);
+function AjaxRegistroCliente(){
+    var formData = new FormData($("#FormularioCliente")[0]);
 		console.log(formData);
 		$.ajax({
-			url: "../../controlador/Mantenimiento/CPerfil.php?op=AccionPerfil",
+			url: "../../controlador/Mantenimiento/CCliente.php?op=AccionCliente",
 			 type: "POST",
 			 data: formData,
 			 contentType: false,
@@ -50,31 +50,31 @@ function AjaxRegistroPerfil(){
 					var Mensaje=data.Mensaje;
 				 	var Error=data.Registro;
 					if(!Error){
-						$("#ModalPerfil #cuerpo").removeClass("whirl");
-						$("#ModalPerfil #cuerpo").removeClass("ringed");
-						$("#ModalPerfil").modal("hide");
+						$("#ModalCliente #cuerpo").removeClass("whirl");
+						$("#ModalCliente #cuerpo").removeClass("ringed");
+						$("#ModalCliente").modal("hide");
 						swal("Error:", Mensaje);
-						LimpiarPerfil();
-						tablaPerfil.ajax.reload();
+						LimpiarCliente();
+						tablaCliente.ajax.reload();
 					}else{
-						$("#ModalPerfil #cuerpo").removeClass("whirl");
-						$("#ModalPerfil #cuerpo").removeClass("ringed");
-						$("#ModalPerfil").modal("hide");
+						$("#ModalCliente #cuerpo").removeClass("whirl");
+						$("#ModalCliente #cuerpo").removeClass("ringed");
+						$("#ModalCliente").modal("hide");
 					   swal("Acción:", Mensaje);
-						LimpiarPerfil();
-						tablaPerfil.ajax.reload();
+						LimpiarCliente();
+						tablaCliente.ajax.reload();
 					}
 			 }
 		});
 }
 function Listar_Estado(){
-	 $.post("../../controlador/Mantenimiento/CPerfil.php?op=listar_estados", function (ts) {
-      $("#PerfilEstado").append(ts);
+	 $.post("../../controlador/Mantenimiento/CCliente.php?op=listar_estados", function (ts) {
+      $("#ClienteEstado").append(ts);
    });
 }
-function Listar_Perfil(){
+function Listar_Cliente(){
 
-	tablaPerfil = $('#tablaPerfil').dataTable({
+	tablaCliente = $('#tablaCliente').dataTable({
 		"aProcessing": true,
 		"aServerSide": true,
 		"processing": true,
@@ -82,11 +82,11 @@ function Listar_Perfil(){
 		"ordering": true, // Ordenamiento en columna de tabla
 		"info": true, // Informacion de cabecera tabla
 		"responsive": true, // Accion de responsive
-	    dom: 'lBfrtip',
+	  dom: 'lBfrtip',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
           "order": [[0, "asc"]],
-		"bDestroy": true,
-         "columnDefs": [
+		"bDestroy": true
+        , "columnDefs": [
             {
                "className": "text-center"
                , "targets": [1,2]
@@ -120,8 +120,8 @@ function Listar_Perfil(){
                , className: 'btn-info'
             }
             ],
-        "ajax": { //Solicitud Ajax Servidor
-			url: '../../controlador/Mantenimiento/CPerfil.php?op=Listar_Perfil',
+          "ajax": { //Solicitud Ajax Servidor
+			url: '../../controlador/Mantenimiento/CCliente.php?op=Listar_Cliente',
 			type: "POST",
 			dataType: "JSON",
 			error: function (e) {
@@ -132,8 +132,8 @@ function Listar_Perfil(){
 		oLanguage: español,
 	}).DataTable();
 	//Aplicar ordenamiento y autonumeracion , index
-	tablaPerfil.on('order.dt search.dt', function () {
-		tablaPerfil.column(0, {
+	tablaCliente.on('order.dt search.dt', function () {
+		tablaCliente.column(0, {
 			search: 'applied',
 			order: 'applied'
 		}).nodes().each(function (cell, i) {
@@ -141,53 +141,54 @@ function Listar_Perfil(){
 		});
 	}).draw();
 }
-function NuevoPerfil(){
-    $("#ModalPerfil").modal({
+function NuevoCliente(){
+    $("#ModalCliente").modal({
       backdrop: 'static'
       , keyboard: false
     });
-    $("#ModalPerfil").modal("show");
-    $("#tituloModalPerfil").empty();
-    $("#tituloModalPerfil").append("Nuevo Perfil:");
+    $("#ModalCliente").modal("show");
+    $("#tituloModalCliente").empty();
+    $("#tituloModalCliente").append("Nuevo Cliente:");
 }
-function EditarPerfil(idPerfil){
-    $("#ModalPerfil").modal({
+function EditarCliente(idCliente){
+    $("#ModalCliente").modal({
       backdrop: 'static'
       , keyboard: false
     });
-    $("#ModalPerfil").modal("show");
-    $("#tituloModalPerfil").empty();
-    $("#tituloModalPerfil").append("Editar Perfil:");
-	RecuperarPerfil(idPerfil);
+    $("#ModalCliente").modal("show");
+    $("#tituloModalCliente").empty();
+    $("#tituloModalCliente").append("Editar Cliente:");
+	RecuperarCliente(idCliente);
 }
-function RecuperarPerfil(idPerfil){
+function RecuperarCliente(idCliente){
 	//solicitud de recuperar Proveedor
-	$.post("../../controlador/Mantenimiento/CPerfil.php?op=RecuperarInformacion_Perfil",{"idPerfil":idPerfil}, function(data, status){
+	$.post("../../controlador/Mantenimiento/CCliente.php?op=RecuperarInformacion_Cliente",{"idCliente":idCliente}, function(data, status){
 		data = JSON.parse(data);
 		console.log(data);
 
-	$("#idPerfil").val(data.idPerfil);
-	$("#PerfilNombre").val(data.nombrePerfil);
-	$("#PerfilDescripcion").val(data.descripcionPerfil);
-	$("#PerfilEstado").val(data.Estado_idEstado);
+	$("#idCliente").val(data.idCliente);
+	$("#ClienteNombre").val(data.NombreCliente);
+    $("#ClienteContacto").val(data.Contacto);
+    $("#ClienteDireccion").val(data.Direccion);
+	$("#ClienteEstado").val(data.Estado_idEstado);
 
 	});
 }
-function EliminarPerfil(idPerfil){
+function EliminarCliente(idCliente){
       swal({
       title: "Eliminar?",
-      text: "Esta Seguro que desea Eliminar Perfil!",
+      text: "Esta Seguro que desea Eliminar Cliente!",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Si, Eliminar!",
       closeOnConfirm: false
    }, function () {
-      ajaxEliminarPerfil(idPerfil);
+      ajaxEliminarCliente(idCliente);
    });
 }
-function ajaxEliminarPerfil(idPerfil){
-    $.post("../../controlador/Mantenimiento/CPerfil.php?op=Eliminar_Perfil", {idPerfil: idPerfil}, function (data, e) {
+function ajaxEliminarCliente(idCliente){
+    $.post("../../controlador/Mantenimiento/CCliente.php?op=Eliminar_Cliente", {idCliente: idCliente}, function (data, e) {
       data = JSON.parse(data);
       var Error = data.Error;
       var Mensaje = data.Mensaje;
@@ -195,25 +196,25 @@ function ajaxEliminarPerfil(idPerfil){
          swal("Error", Mensaje, "error");
       } else {
          swal("Eliminado!", Mensaje, "success");
-         tablaPerfil.ajax.reload();
+         tablaCliente.ajax.reload();
       }
    });
 }
-function HabilitarPerfil(idPerfil){
+function HabilitarCliente(idCliente){
       swal({
       title: "Habilitar?",
-      text: "Esta Seguro que desea Habilitar Perfil!",
+      text: "Esta Seguro que desea Habilitar Cliente!",
       type: "info",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Si, Habilitar!",
       closeOnConfirm: false
    }, function () {
-      ajaxHabilitarPerfil(idPerfil);
+      ajaxHabilitarCliente(idCliente);
    });
 }
-function ajaxHabilitarPerfil(idPerfil){
-       $.post("../../controlador/Mantenimiento/CPerfil.php?op=Recuperar_Perfil", {idPerfil: idPerfil}, function (data, e) {
+function ajaxHabilitarCliente(idCliente){
+       $.post("../../controlador/Mantenimiento/CCliente.php?op=Recuperar_Cliente", {idCliente: idCliente}, function (data, e) {
       data = JSON.parse(data);
       var Error = data.Error;
       var Mensaje = data.Mensaje;
@@ -221,22 +222,19 @@ function ajaxHabilitarPerfil(idPerfil){
          swal("Error", Mensaje, "error");
       } else {
          swal("Eliminado!", Mensaje, "success");
-         tablaPerfil.ajax.reload();
+         tablaCliente.ajax.reload();
       }
    });
 }
-function LimpiarPerfil(){
-   $('#FormularioPerfil')[0].reset();
-	$("#idPerfil").val("");
+function LimpiarCliente(){
+   $('#FormularioCliente')[0].reset();
+	$("#idCliente").val("");
 
 }
 function Cancelar(){
-    LimpiarPerfil();
-    $("#ModalPerfil").modal("hide");
+    LimpiarCliente();
+    $("#ModalCliente").modal("hide");
+}
 
-}
-function PermisosPerfil(idPerfil){
-     $.redirect('PermisosPerfil.php', {'idPerfil':idPerfil});
-}
 
 init();

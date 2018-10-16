@@ -1,21 +1,22 @@
-var tablaPerfil;
+var tablaProyecto;
 function init(){
    Iniciar_Componentes();
-   Listar_Perfil();
+     Listar_Proyecto();
 	Listar_Estado();
+    Listar_Clientes();
 }
 function Iniciar_Componentes(){
    //var fecha=hoyFecha();
 
 	//$('#date_fecha_comprobante').datepicker('setDate',fecha);
 
-    $("#FormularioPerfil").on("submit",function(e)
+    $("#FormularioProyecto").on("submit",function(e)
 	{
-	      RegistroPerfil(e);
+	      RegistroProyecto(e);
 	});
 
 }
-function RegistroPerfil(event){
+function RegistroProyecto(event){
 	  //cargar(true);
 	event.preventDefault(); //No se activará la acción predeterminada del evento
     var error="";
@@ -27,18 +28,18 @@ function RegistroPerfil(event){
     });
 
     if(error==""){
-		$("#ModalPerfil #cuerpo").addClass("whirl");
-		$("#ModalPerfil #cuerpo").addClass("ringed");
-		setTimeout('AjaxRegistroPerfil()', 2000);
+		$("#ModalProyecto #cuerpo").addClass("whirl");
+		$("#ModalProyecto #cuerpo").addClass("ringed");
+		setTimeout('AjaxRegistroProyecto()', 2000);
 	}else{
  		notificar_warning("Complete :<br>"+error);
 	}
 }
-function AjaxRegistroPerfil(){
-    var formData = new FormData($("#FormularioPerfil")[0]);
+function AjaxRegistroProyecto(){
+    var formData = new FormData($("#FormularioProyecto")[0]);
 		console.log(formData);
 		$.ajax({
-			url: "../../controlador/Mantenimiento/CPerfil.php?op=AccionPerfil",
+			url: "../../controlador/Mantenimiento/CProyecto.php?op=AccionProyecto",
 			 type: "POST",
 			 data: formData,
 			 contentType: false,
@@ -50,31 +51,36 @@ function AjaxRegistroPerfil(){
 					var Mensaje=data.Mensaje;
 				 	var Error=data.Registro;
 					if(!Error){
-						$("#ModalPerfil #cuerpo").removeClass("whirl");
-						$("#ModalPerfil #cuerpo").removeClass("ringed");
-						$("#ModalPerfil").modal("hide");
+						$("#ModalProyecto #cuerpo").removeClass("whirl");
+						$("#ModalProyecto #cuerpo").removeClass("ringed");
+						$("#ModalProyecto").modal("hide");
 						swal("Error:", Mensaje);
-						LimpiarPerfil();
-						tablaPerfil.ajax.reload();
+						LimpiarProyecto();
+						tablaProyecto.ajax.reload();
 					}else{
-						$("#ModalPerfil #cuerpo").removeClass("whirl");
-						$("#ModalPerfil #cuerpo").removeClass("ringed");
-						$("#ModalPerfil").modal("hide");
+						$("#ModalProyecto #cuerpo").removeClass("whirl");
+						$("#ModalProyecto #cuerpo").removeClass("ringed");
+						$("#ModalProyecto").modal("hide");
 					   swal("Acción:", Mensaje);
-						LimpiarPerfil();
-						tablaPerfil.ajax.reload();
+						LimpiarProyecto();
+						tablaProyecto.ajax.reload();
 					}
 			 }
 		});
 }
 function Listar_Estado(){
-	 $.post("../../controlador/Mantenimiento/CPerfil.php?op=listar_estados", function (ts) {
-      $("#PerfilEstado").append(ts);
+	 $.post("../../controlador/Mantenimiento/CProyecto.php?op=listar_estados", function (ts) {
+      $("#ProyectoEstado").append(ts);
    });
 }
-function Listar_Perfil(){
+function Listar_Clientes(){
+	 $.post("../../controlador/Mantenimiento/CProyecto.php?op=listar_clientes", function (ts) {
+      $("#ProyectoCliente").append(ts);
+   });
+}
+function Listar_Proyecto(){
 
-	tablaPerfil = $('#tablaPerfil').dataTable({
+	tablaProyecto = $('#tablaProyecto').dataTable({
 		"aProcessing": true,
 		"aServerSide": true,
 		"processing": true,
@@ -82,14 +88,14 @@ function Listar_Perfil(){
 		"ordering": true, // Ordenamiento en columna de tabla
 		"info": true, // Informacion de cabecera tabla
 		"responsive": true, // Accion de responsive
-	    dom: 'lBfrtip',
+	  dom: 'lBfrtip',
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
           "order": [[0, "asc"]],
-		"bDestroy": true,
-         "columnDefs": [
+		"bDestroy": true
+        , "columnDefs": [
             {
                "className": "text-center"
-               , "targets": [1,2]
+               , "targets": [1,2,4]
             }
             , {
                "className": "text-left"
@@ -120,8 +126,8 @@ function Listar_Perfil(){
                , className: 'btn-info'
             }
             ],
-        "ajax": { //Solicitud Ajax Servidor
-			url: '../../controlador/Mantenimiento/CPerfil.php?op=Listar_Perfil',
+          "ajax": { //Solicitud Ajax Servidor
+			url: '../../controlador/Mantenimiento/CProyecto.php?op=Listar_Proyecto',
 			type: "POST",
 			dataType: "JSON",
 			error: function (e) {
@@ -132,8 +138,8 @@ function Listar_Perfil(){
 		oLanguage: español,
 	}).DataTable();
 	//Aplicar ordenamiento y autonumeracion , index
-	tablaPerfil.on('order.dt search.dt', function () {
-		tablaPerfil.column(0, {
+	tablaProyecto.on('order.dt search.dt', function () {
+		tablaProyecto.column(0, {
 			search: 'applied',
 			order: 'applied'
 		}).nodes().each(function (cell, i) {
@@ -141,53 +147,54 @@ function Listar_Perfil(){
 		});
 	}).draw();
 }
-function NuevoPerfil(){
-    $("#ModalPerfil").modal({
+function NuevoProyecto(){
+    $("#ModalProyecto").modal({
       backdrop: 'static'
       , keyboard: false
     });
-    $("#ModalPerfil").modal("show");
-    $("#tituloModalPerfil").empty();
-    $("#tituloModalPerfil").append("Nuevo Perfil:");
+    $("#ModalProyecto").modal("show");
+    $("#tituloModalProyecto").empty();
+    $("#tituloModalProyecto").append("Nuevo Proyecto:");
 }
-function EditarPerfil(idPerfil){
-    $("#ModalPerfil").modal({
+function EditarProyecto(idProyecto){
+    $("#ModalProyecto").modal({
       backdrop: 'static'
       , keyboard: false
     });
-    $("#ModalPerfil").modal("show");
-    $("#tituloModalPerfil").empty();
-    $("#tituloModalPerfil").append("Editar Perfil:");
-	RecuperarPerfil(idPerfil);
+    $("#ModalProyecto").modal("show");
+    $("#tituloModalProyecto").empty();
+    $("#tituloModalProyecto").append("Editar Proyecto:");
+	RecuperarProyecto(idProyecto);
 }
-function RecuperarPerfil(idPerfil){
+function RecuperarProyecto(idProyecto){
 	//solicitud de recuperar Proveedor
-	$.post("../../controlador/Mantenimiento/CPerfil.php?op=RecuperarInformacion_Perfil",{"idPerfil":idPerfil}, function(data, status){
+	$.post("../../controlador/Mantenimiento/CProyecto.php?op=RecuperarInformacion_Proyecto",{"idProyecto":idProyecto}, function(data, status){
 		data = JSON.parse(data);
 		console.log(data);
 
-	$("#idPerfil").val(data.idPerfil);
-	$("#PerfilNombre").val(data.nombrePerfil);
-	$("#PerfilDescripcion").val(data.descripcionPerfil);
-	$("#PerfilEstado").val(data.Estado_idEstado);
+	$("#idProyecto").val(data.idProyecto);
+	$("#ProyectoNombre").val(data.NombreProyecto);
+    $("#ProyectoCliente").val(data.Cliente_idCliente);
+    $("#ProyectoDescripcion").val(data.Descripcion);
+	$("#ProyectoEstado").val(data.Estado_idEstado);
 
 	});
 }
-function EliminarPerfil(idPerfil){
+function EliminarProyecto(idProyecto){
       swal({
       title: "Eliminar?",
-      text: "Esta Seguro que desea Eliminar Perfil!",
+      text: "Esta Seguro que desea Eliminar Proyecto!",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Si, Eliminar!",
       closeOnConfirm: false
    }, function () {
-      ajaxEliminarPerfil(idPerfil);
+      ajaxEliminarProyecto(idProyecto);
    });
 }
-function ajaxEliminarPerfil(idPerfil){
-    $.post("../../controlador/Mantenimiento/CPerfil.php?op=Eliminar_Perfil", {idPerfil: idPerfil}, function (data, e) {
+function ajaxEliminarProyecto(idProyecto){
+    $.post("../../controlador/Mantenimiento/CProyecto.php?op=Eliminar_Proyecto", {idProyecto: idProyecto}, function (data, e) {
       data = JSON.parse(data);
       var Error = data.Error;
       var Mensaje = data.Mensaje;
@@ -195,25 +202,25 @@ function ajaxEliminarPerfil(idPerfil){
          swal("Error", Mensaje, "error");
       } else {
          swal("Eliminado!", Mensaje, "success");
-         tablaPerfil.ajax.reload();
+         tablaProyecto.ajax.reload();
       }
    });
 }
-function HabilitarPerfil(idPerfil){
+function HabilitarProyecto(idProyecto){
       swal({
       title: "Habilitar?",
-      text: "Esta Seguro que desea Habilitar Perfil!",
+      text: "Esta Seguro que desea Habilitar Proyecto!",
       type: "info",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Si, Habilitar!",
       closeOnConfirm: false
    }, function () {
-      ajaxHabilitarPerfil(idPerfil);
+      ajaxHabilitarProyecto(idProyecto);
    });
 }
-function ajaxHabilitarPerfil(idPerfil){
-       $.post("../../controlador/Mantenimiento/CPerfil.php?op=Recuperar_Perfil", {idPerfil: idPerfil}, function (data, e) {
+function ajaxHabilitarProyecto(idProyecto){
+       $.post("../../controlador/Mantenimiento/CProyecto.php?op=Recuperar_Proyecto", {idProyecto: idProyecto}, function (data, e) {
       data = JSON.parse(data);
       var Error = data.Error;
       var Mensaje = data.Mensaje;
@@ -221,22 +228,21 @@ function ajaxHabilitarPerfil(idPerfil){
          swal("Error", Mensaje, "error");
       } else {
          swal("Eliminado!", Mensaje, "success");
-         tablaPerfil.ajax.reload();
+         tablaProyecto.ajax.reload();
       }
    });
 }
-function LimpiarPerfil(){
-   $('#FormularioPerfil')[0].reset();
-	$("#idPerfil").val("");
+function LimpiarProyecto(){
+   $('#FormularioProyecto')[0].reset();
+	$("#idProyecto").val("");
 
 }
 function Cancelar(){
-    LimpiarPerfil();
-    $("#ModalPerfil").modal("hide");
-
-}
-function PermisosPerfil(idPerfil){
-     $.redirect('PermisosPerfil.php', {'idPerfil':idPerfil});
+    LimpiarProyecto();
+    $("#ModalProyecto").modal("hide");
 }
 
+function Tareas(idProyecto){
+     $.redirect('MantTarea.php', {'idProyecto':idProyecto});
+}
 init();

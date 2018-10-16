@@ -90,7 +90,7 @@
                                         <div class="form-group row">
                                             <label for="PerfilNombre" class="col-md-5 col-form-label"><i class="fa fa-male fa-lg mr-3"></i>Nombre de Perfil<span class="red">*</span>:</label>
                                             <div class="col-md-7">
-                                                <input class="form-control validarPanel" id="PerfilNombre" name="PerfilNombre" data-message="- Campo  Nombre de Perfils"  placeholder="Nombre de Perfil" type="text">
+                                                <input class="form-control validarPanel" id="PerfilNombre" name="PerfilNombre" data-message="- Campo  Nombre de Perfils"  placeholder="Nombre de Perfil" type="text" maxlength="50">
 
                                             </div>
                                         </div>
