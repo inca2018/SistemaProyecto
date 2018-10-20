@@ -39,8 +39,9 @@
              return '<div class="badge badge-danger">'.$reg->nombreEstado.'</div>';
         }
     }
+
     function BuscarAccion($reg){
-        if($reg->Estado_idEstado==1 || $reg->Estado_idEstado==2 ){
+        if($reg->Estado_idEstado==1 || $reg->Estado_idEstado==2 || $reg->Estado_idEstado==3 || $reg->Estado_idEstado==5 || $reg->Estado_idEstado==6 || $reg->Estado_idEstado==7  ){
             return '
             <button type="button"  title="SubTareas" class="btn btn-info btn-sm" onclick="SubTareas('.$reg->idTarea.')"><i class="fa fa-tasks"></i></button>
             <button type="button" title="Editar" class="btn btn-warning btn-sm" onclick="EditarTarea('.$reg->idTarea.')"><i class="fa fa-edit"></i></button>

@@ -44,7 +44,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                    <div class="col-md-12">
-                                        <table class="table w-100 table-hover table-sm dt-responsive nowrap" id="tablaTarea">
+                                        <table class="table w-100 table-hover table-sm dt-responsive nowrap" id="tablaTarea" style="font-size:11px">
                                             <thead class="thead-light text-center">
                                                 <tr>
                                                     <th data-priority="1">#</th>
