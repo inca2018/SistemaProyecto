@@ -41,6 +41,12 @@
 			return ejecutarConsultaSimpleFila($sql);
 		}
 
+       public function RecuperarTotales(){
+			$sql="CALL `SP_USUARIO_RECUPERAR_TOTALES`();";
+			return ejecutarConsultaSimpleFila($sql);
+		}
+
+
    }
 
 ?>

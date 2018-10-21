@@ -21,6 +21,7 @@
                             </div>
                         </div>
                         <hr class="mt-2 mb-2">
+
                          <div class="row">
                             <div class="col-md-2 offset-10">
                                 <button class="btn btn-success btn-block btn-sm" onclick="NuevoPerfil();"><i class="fa fa-plus fa-lg mr-2"></i> Nueva Perfil</button>
@@ -31,13 +32,13 @@
                             <div class="col-md-12">
                                 <div class="row">
                                    <div class="col-md-12">
-                                        <table class="table w-100 table-hover table-sm dt-responsive nowrap" id="tablaPerfil">
+                                        <table class="table w-100 table-hover table-sm dt-responsive   " id="tablaPerfil">
                                             <thead class="thead-light text-center">
                                                 <tr>
                                                     <th data-priority="1">#</th>
                                                     <th>ESTADO</th>
                                                     <th>NOMBRE PERFIL</th>
-                                                    <th>DESCRIPCION</th>
+                                                    <th width="40%">DESCRIPCION</th>
                                                     <th>REGISTRO</th>
                                                     <th>ACCION</th>
                                                 </tr>

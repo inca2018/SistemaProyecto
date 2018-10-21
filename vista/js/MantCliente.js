@@ -89,11 +89,14 @@ function Listar_Cliente(){
         , "columnDefs": [
             {
                "className": "text-center"
-               , "targets": [1,2]
+               , "targets": [0,1,3,4,5]
             }
             , {
                "className": "text-left"
-               , "targets": [0]
+               , "targets": []
+            }, {
+               "className": "text-right"
+               , "targets": [2]
             }
          , ]
          , buttons: [

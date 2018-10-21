@@ -31,16 +31,18 @@
                             <div class="col-md-12">
                                 <div class="row">
                                    <div class="col-md-12">
-                                        <table class="table w-100 table-hover table-sm dt-responsive nowrap" id="tablaProyecto">
+                                        <table class="table w-100 table-hover table-sm dt-responsive " id="tablaProyecto">
                                             <thead class="thead-light text-center">
                                                 <tr>
-                                                    <th data-priority="1">#</th>
-                                                    <th>ESTADO</th>
-                                                    <th>NOMBRE DE PROYECTO</th>
-                                                    <th>CLIENTE</th>
-                                                    <th>NUMERO DE TAREAS</th>
-                                                    <th>FECHA DE REGISTRO</th>
-                                                    <th>ACCION</th>
+                                                    <th data-priority="1" width="5%">#</th>
+                                                    <th width="5%">ESTADO</th>
+                                                    <th width="15%">NOMBRE DE PROYECTO</th>
+                                                    <th width="10%">PRESUPUESTO</th>
+                                                    <th width="10%">CLIENTE</th>
+                                                    <th width="15%">JEFE DE PROYECTO</th>
+                                                    <th width="10%">ACTIVIDADES</th>
+                                                    <th width="10%">REGISTRO</th>
+                                                    <th width="10%">ACCION</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -114,6 +116,16 @@
                                             <div class="col-md-7">
                                                  <textarea id="ProyectoDescripcion" name="ProyectoDescripcion" rows="4" class="form-control text-left validarPanel" data-message="- Campo  Descripción de Proyecto">
                                                  </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 br">
+                                        <div class="form-group row">
+                                            <label for="ProyectoJefe" class="col-md-5 col-form-label">Jefe de Proyecto<span class="red">*</span>:</label>
+                                            <div class="col-md-7">
+                                                <select class="form-control validarPanel" id="ProyectoJefe" name="ProyectoJefe" data-message="- Campo Jefe del Proyecto">
+
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

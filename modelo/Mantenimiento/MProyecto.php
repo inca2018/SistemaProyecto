@@ -25,15 +25,15 @@
           }
           return validarDatos($sql);
       }
-      public function RegistroProyecto($idProyecto,$ProyectoNombre,$ProyectoCliente,$ProyectoDescripcion,$ProyectoEstado,$login_idLog){
+      public function RegistroProyecto($idProyecto,$ProyectoNombre,$ProyectoCliente,$ProyectoDescripcion,$ProyectoEstado,$login_idLog,$ProyectoJefe){
         $sql="";
 
         if($idProyecto=="" || $idProyecto==null || empty($idProyecto)){
-             $sql="CALL `SP_PROYECTO_REGISTRO`('$ProyectoNombre','$ProyectoCliente','$ProyectoDescripcion','$ProyectoEstado','$login_idLog');";
+             $sql="CALL `SP_PROYECTO_REGISTRO`('$ProyectoNombre','$ProyectoCliente','$ProyectoDescripcion','$ProyectoEstado','$login_idLog','$ProyectoJefe');";
 
         }else{
 
-           $sql="CALL `SP_PROYECTO_ACTUALIZAR`('$idProyecto','$ProyectoNombre','$ProyectoCliente','$ProyectoDescripcion','$ProyectoEstado','$login_idLog');";
+           $sql="CALL `SP_PROYECTO_ACTUALIZAR`('$idProyecto','$ProyectoNombre','$ProyectoCliente','$ProyectoDescripcion','$ProyectoEstado','$login_idLog','$ProyectoJefe');";
         }
 
          return ejecutarConsulta($sql);

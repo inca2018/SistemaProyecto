@@ -18,7 +18,7 @@
 	$login_idLog=$_SESSION['idUsuario'];
 
    $idTarea=isset($_POST["idTareaE"])?limpiarCadena($_POST["idTareaE"]):"";
-
+   $idActividad=isset($_POST["idActividad"])?limpiarCadena($_POST["idActividad"]):"";
 
    function BuscarEstado($reg){
         if($reg->Estado_idEstado=='1' || $reg->Estado_idEstado==1 ){
@@ -148,6 +148,11 @@
 
       case 'RecuperarInformacion_SubTarea':
 			$rspta=$mantenimiento->Recuperar_SubTarea($idSubTarea);
+         echo json_encode($rspta);
+      break;
+
+     case 'RecuperarFecha':
+			$rspta=$mantenimiento->RecuperarFecha($idActividad);
          echo json_encode($rspta);
       break;
 

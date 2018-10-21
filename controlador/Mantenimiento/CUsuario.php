@@ -13,11 +13,7 @@
     $UsuarioPassword=isset($_POST["UsuarioPassword"])?limpiarCadena($_POST["UsuarioPassword"]):"";
     $UsuarioEstado=isset($_POST["UsuarioEstado"])?limpiarCadena($_POST["UsuarioEstado"]):"";
 
-
-
-   $login_idLog=$_SESSION['idUsuario'];
-
-
+    $login_idLog=$_SESSION['idUsuario'];
     function BuscarEstado($reg){
         if($reg->Estado_idEstado=='1' || $reg->Estado_idEstado==1 ){
             return '<div class="badge badge-success">'.$reg->nombreEstado.'</div>';
@@ -168,6 +164,10 @@
 
 		case 'RecuperarInformacion_Usuario':
 			$rspta=$mantenimiento->Recuperar_Usuario($idUsuario);
+         echo json_encode($rspta);
+      break;
+    case 'RecuperarTotales':
+			$rspta=$mantenimiento->RecuperarTotales();
          echo json_encode($rspta);
       break;
 

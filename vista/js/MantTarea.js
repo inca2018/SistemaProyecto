@@ -5,6 +5,23 @@ function init(){
      Listar_Tarea(idProyecto);
     Listar_Estado();
     Listar_Personas();
+    Recuperar_Informacion_Proyecto(idProyecto);
+}
+function Recuperar_Informacion_Proyecto(idProyecto){
+    	//solicitud de recuperar Proveedor
+	$.post("../../controlador/Mantenimiento/CTarea.php?op=RecuperarInformacionProyecto",{"idProyectolista":idProyecto}, function(data, status){
+		data = JSON.parse(data);
+		console.log(data);
+
+    $("#proyecto_1").append();
+    $("#proyecto_1").html("<b>"+(data.NombreProyecto).toUpperCase()+"</b>");
+    $("#proyecto_2").append();
+    $("#proyecto_2").html("<b>"+(data.NombreCliente).toUpperCase()+"</b>");
+    $("#proyecto_3").append();
+    $("#proyecto_3").html("<b>"+(data.NombreJefe).toUpperCase()+"</b>");
+    $("#proyecto_4").append();
+    $("#proyecto_4").html("<b>"+0+"</b>");
+	});
 }
 function Iniciar_Componentes(){
    //var fecha=hoyFecha();
@@ -156,7 +173,7 @@ function NuevoTarea(){
     });
     $("#ModalTarea").modal("show");
     $("#tituloModalTarea").empty();
-    $("#tituloModalTarea").append("Nuevo Tarea:");
+    $("#tituloModalTarea").append("Nueva Actividad:");
 }
 function EditarTarea(idTarea){
     $("#ModalTarea").modal({
@@ -165,7 +182,7 @@ function EditarTarea(idTarea){
     });
     $("#ModalTarea").modal("show");
     $("#tituloModalTarea").empty();
-    $("#tituloModalTarea").append("Editar Tarea:");
+    $("#tituloModalTarea").append("Editar Actividad:");
 	RecuperarTarea(idTarea);
 }
 function RecuperarTarea(idTarea){
@@ -246,10 +263,14 @@ function Cancelar(){
     LimpiarTarea();
     $("#ModalTarea").modal("hide");
 }
-function SubTareas(idTarea){
+function SubTareas(idActividad){
        var idProyecto=$("#idProyectoRecu").val();
-     $.redirect('MantSubTarea.php', {'idTarea':idTarea,'idProyecto':idProyecto});
+     $.redirect('MantSubTarea.php', {'idActividad':idActividad,'idProyecto':idProyecto});
 }
+function Participantes(idTarea){
+     $.redirect('Participacion.php', {'idTarea':idTarea});
+}
+
 function Volver(){
 
      $.redirect('MantProyecto.php');

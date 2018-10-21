@@ -11,6 +11,7 @@
 	$ProyectoCliente=isset($_POST["ProyectoCliente"])?limpiarCadena($_POST["ProyectoCliente"]):"";
 	$ProyectoDescripcion=isset($_POST["ProyectoDescripcion"])?limpiarCadena($_POST["ProyectoDescripcion"]):"";
 	$ProyectoEstado=isset($_POST["ProyectoEstado"])?limpiarCadena($_POST["ProyectoEstado"]):"";
+    $ProyectoJefe=isset($_POST["ProyectoJefe"])?limpiarCadena($_POST["ProyectoJefe"]):"";
 
 
 	$login_idLog=$_SESSION['idUsuario'];
@@ -27,7 +28,7 @@
     function BuscarAccion($reg){
         if($reg->Estado_idEstado==1 || $reg->Estado_idEstado==2 ){
             return '
-            <button type="button"  title="Tareas" class="btn btn-info btn-sm" onclick="Tareas('.$reg->idProyecto.')"><i class="fa fa-tasks"></i></button>
+            <button type="button"  title="Actividades" class="btn btn-info btn-sm" onclick="Tareas('.$reg->idProyecto.')"><i class="fa fa-tasks"></i></button>
             <button type="button" title="Editar" class="btn btn-warning btn-sm" onclick="EditarProyecto('.$reg->idProyecto.')"><i class="fa fa-edit"></i></button>
                <button type="button"  title="Eliminar" class="btn btn-danger btn-sm" onclick="EliminarProyecto('.$reg->idProyecto.')"><i class="fa fa-trash"></i></button>
                ';
@@ -50,7 +51,7 @@
                 if($rspta["Error"]){
                     $rspta["Mensaje"].="Por estas razones no se puede Registrar el Proyecto.";
                 }else{
-                    $RespuestaRegistro=$mantenimiento->RegistroProyecto($idProyecto,$ProyectoNombre,$ProyectoCliente,$ProyectoDescripcion,$ProyectoEstado,$login_idLog);
+                    $RespuestaRegistro=$mantenimiento->RegistroProyecto($idProyecto,$ProyectoNombre,$ProyectoCliente,$ProyectoDescripcion,$ProyectoEstado,$login_idLog,$ProyectoJefe);
                     if($RespuestaRegistro){
                         $rspta["Registro"]=true;
                         $rspta["Mensaje"]="Proyecto se registro Correctamente.";
@@ -70,7 +71,7 @@
                     $rspta["Mensaje"].="Por estas razones no se puede Registrar el Proyecto.";
                 }else{
 
-                    $RespuestaRegistro=$mantenimiento->RegistroProyecto($idProyecto,$ProyectoNombre,$ProyectoCliente,$ProyectoDescripcion,$ProyectoEstado,$login_idLog);
+                    $RespuestaRegistro=$mantenimiento->RegistroProyecto($idProyecto,$ProyectoNombre,$ProyectoCliente,$ProyectoDescripcion,$ProyectoEstado,$login_idLog,$ProyectoJefe);
                     if($RespuestaRegistro){
                         $rspta["Registro"]=true;
                         $rspta["Mensaje"]="Proyecto se Actualizo Correctamente.";
@@ -90,12 +91,19 @@
 					echo '<option   value=' . $reg->idEstado . '>' . $reg->nombreEstado . '</option>';
          	}
        break;
-    case 'listar_clientes':
+       case 'listar_clientes':
 
       		$rpta = $general->Listar_Clientes();
              echo '<option value="">--SELECCIONAR--</option>';
          	while ($reg = $rpta->fetch_object()){
 					echo '<option   value=' . $reg->idCliente . '>' . $reg->NombreCliente . '</option>';
+         	}
+       break;
+     case 'listar_jefe_proyecto':
+      		$rpta = $general->RecuperarJefesProyecto();
+             echo '<option value="">--SELECCIONAR--</option>';
+         	while ($reg = $rpta->fetch_object()){
+					echo '<option   value=' . $reg->idPersona . '>' . $reg->NombreJefeProyecto . '</option>';
          	}
        break;
 
@@ -108,10 +116,12 @@
                "0"=>'',
                "1"=>BuscarEstado($reg),
                "2"=>$reg->NombreProyecto,
-               "3"=>$reg->NombreCliente,
-               "4"=>$reg->CantidadTarea,
-               "5"=>$reg->fechaRegistro,
-               "6"=>BuscarAccion($reg)
+               "3"=>"S/. ".number_format($reg->CostoTotal,2),
+               "4"=>$reg->NombreCliente,
+               "5"=>$reg->NombreJefe,
+               "6"=>$reg->CantidadTarea,
+               "7"=>$reg->fechaRegistro,
+               "8"=>BuscarAccion($reg)
             );
          }
          $results = array(

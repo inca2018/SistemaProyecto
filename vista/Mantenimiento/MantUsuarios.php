@@ -9,11 +9,9 @@
    <section class="section-container">
       <!-- Page content-->
       	<div class="content-wrapper">
-            <!-- <div class="content-heading">
-              <div>Mantenimiento Usuarios</div>
-            </div> -->
+
             <!-- START card-->
-            <div class="card card-default m-1 ">
+            <div class="card  m-1 sombra2">
                <div class="card-body ">
                         <div class="row ">
                             <div class="col-md-12 w-100 text-center ">
@@ -21,6 +19,90 @@
                             </div>
                         </div>
                         <hr class="mt-2 mb-2">
+                         <div class="row"  >
+                           <div class="col-md-12">
+                                <div class="row">
+                                   <div class="col-xl-3 col-lg-6">
+                                      <!-- START card-->
+                                      <div class="card bg-warning-dark border-0 sombra1">
+                                         <div class="card-header">
+                                            <div class="row align-items-center">
+                                               <div class="col-3">
+                                                  <em class="fa fa-user fa-4x"></em>
+
+                                               </div>
+                                               <div class="col-9 text-right">
+                                                  <div class="text-lg" id="total_1">0</div>
+                                                    <h4><p class="m-0"></p>Administrador</h4>
+                                               </div>
+                                            </div>
+                                         </div>
+
+                                      </div>
+                                      <!-- END card-->
+                                   </div>
+                                   <div class="col-xl-3 col-lg-6">
+                                      <!-- START card-->
+                                      <div class="card bg-green-dark border-0 sombra1" >
+                                         <div class="card-header">
+                                            <div class="row align-items-center">
+                                               <div class="col-3">
+                                                 <em class="fa fa-user fa-4x"></em>
+                                               </div>
+                                               <div class="col-9 text-right">
+                                                  <div class="text-lg" id="total_2">0</div>
+                                                      <h4> <p class="m-0">Jefe de Proyecto</p> </h4>
+
+                                               </div>
+                                            </div>
+                                         </div>
+
+                                      </div>
+                                      <!-- END card-->
+                                   </div>
+                                   <div class="col-xl-3 col-lg-6">
+                                      <!-- START card-->
+                                      <div class="card bg-purple-dark border-0 sombra1">
+                                         <div class="card-header">
+                                            <div class="row align-items-center">
+                                               <div class="col-3">
+                                                  <em class="fa fa-user fa-4x"></em>
+                                               </div>
+                                               <div class="col-9 text-right">
+                                                  <div class="text-lg" id="total_3">0</div>
+                                                            <h4> <p class="m-0">Empleados</p></h4>
+
+                                               </div>
+                                            </div>
+                                         </div>
+
+                                      </div>
+                                      <!-- END card-->
+                                   </div>
+                                    <div class="col-xl-3 col-lg-6">
+                                      <!-- START card-->
+                                      <div class="card bg-info-dark border-0 sombra1">
+                                         <div class="card-header">
+                                            <div class="row align-items-center">
+                                               <div class="col-3">
+                                                  <em class="fa fa-user fa-4x"></em>
+                                               </div>
+                                               <div class="col-9 text-right">
+                                                  <div class="text-lg" id="total_4">0</div>
+                                                            <h4> <p class="m-0">Total Usuarios</p></h4>
+
+                                               </div>
+                                            </div>
+                                         </div>
+
+                                      </div>
+                                      <!-- END card-->
+                                   </div>
+                                </div>
+                           </div>
+
+                        </div>
+                        <hr>
                          <div class="row">
 
                             <div class="col-md-2 offset-10">
@@ -32,7 +114,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                    <div class="col-md-12">
-                                        <table class="table w-100 table-hover table-sm dt-responsive nowrap" id="tablaUsuario">
+                                        <table class="table w-100 table-hover table-sm dt-responsive nowrap sombra2" id="tablaUsuario">
                                             <thead class="thead-light text-center">
                                                 <tr>
                                                     <th data-priority="1">#</th>

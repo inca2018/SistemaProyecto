@@ -68,6 +68,11 @@
 			return ejecutarConsultaSimpleFila($sql);
 		}
 
+        public function RecuperarJefesProyecto(){
+			$sql="CALL `SP_PERSONAS_LISTAR_JEFE_PROYECTO`();";
+			return ejecutarConsulta($sql);
+		}
+
    }
 
 ?>

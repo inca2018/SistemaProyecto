@@ -1,9 +1,10 @@
 var tablaProyecto;
 function init(){
    Iniciar_Componentes();
-     Listar_Proyecto();
+    Listar_Proyecto();
 	Listar_Estado();
     Listar_Clientes();
+    Listar_JefeProyecto();
 }
 function Iniciar_Componentes(){
    //var fecha=hoyFecha();
@@ -78,6 +79,11 @@ function Listar_Clientes(){
       $("#ProyectoCliente").append(ts);
    });
 }
+function Listar_JefeProyecto(){
+	 $.post("../../controlador/Mantenimiento/CProyecto.php?op=listar_jefe_proyecto", function (ts) {
+      $("#ProyectoJefe").append(ts);
+   });
+}
 function Listar_Proyecto(){
 
 	tablaProyecto = $('#tablaProyecto').dataTable({
@@ -95,11 +101,15 @@ function Listar_Proyecto(){
         , "columnDefs": [
             {
                "className": "text-center"
-               , "targets": [1,2,4]
+               , "targets": [0,1,4,5,6]
             }
             , {
                "className": "text-left"
-               , "targets": [0]
+               , "targets": [2]
+            },
+            {
+               "className": "text-right"
+               , "targets": [3]
             }
          , ]
          , buttons: [
@@ -177,7 +187,7 @@ function RecuperarProyecto(idProyecto){
     $("#ProyectoCliente").val(data.Cliente_idCliente);
     $("#ProyectoDescripcion").val(data.Descripcion);
 	$("#ProyectoEstado").val(data.Estado_idEstado);
-
+    $("#ProyectoJefe").val(data.Persona_idPersona);
 	});
 }
 function EliminarProyecto(idProyecto){
