@@ -19,7 +19,7 @@ function Iniciar_Componentes() {
 
 }
 
-function RecuperarFecha(idAsignacion) {
+function RecuperarFecha(idActividad) {
 
 
     $('#date_inicio').datepicker({
@@ -29,15 +29,7 @@ function RecuperarFecha(idAsignacion) {
         format: 'dd/mm/yyyy',
     });
 
-    $.post("../../controlador/Mantenimiento/CSubTarea.php?op=RecuperarFecha", {
-        "idSubTarea": idSubTarea
-    }, function (data, status) {
-        data = JSON.parse(data);
-        console.log(data);
-        var fecha=data.fecha;
-
-        if(fecha=="NO ENCONTRO"){
-             $('#date_inicio').datepicker().on('changeDate', function (ev) {
+    $('#date_inicio').datepicker().on('changeDate', function (ev) {
                 var f_inicio = $("#inicio").val();
                 var f_fin = $("#fin").val();
                 var day = parseInt(f_inicio.substr(0, 2));
@@ -45,22 +37,7 @@ function RecuperarFecha(idAsignacion) {
                 var year = parseInt(f_inicio.substr(6, 8));
 
                 $('#date_fin').datepicker('setStartDate', new Date(year, (month - 1), day));
-            });
-
-
-           }else{
-             $('#date_inicio').datepicker().on('changeDate', function (ev) {
-
-                var day = parseInt(fecha.substr(0, 2));
-                var month = parseInt(fecha.substr(3, 2));
-                var year = parseInt(fecha.substr(6, 8));
-
-                $('#date_fin').datepicker('setStartDate', new Date(year, (month - 1), day));
-            });
-           }
-
-
-    });
+      });
 
      $('#date_fin').datepicker().on('changeDate', function (ev) {
                 var f_inicio = $("#inicio").val();
@@ -70,6 +47,30 @@ function RecuperarFecha(idAsignacion) {
                 var year = parseInt(f_fin.substr(6, 8));
                 $('#date_inicio').datepicker('setEndDate', new Date(year, (month - 1), day));
             });
+
+
+    $.post("../../controlador/Mantenimiento/CSubTarea.php?op=RecuperarFecha", {
+        "idActividad": idActividad
+    }, function (data, status) {
+        data = JSON.parse(data);
+        console.log(data);
+        var fecha=data.fecha;
+        debugger;
+        if(fecha=="NO ENCONTRO"){
+
+
+           }else{
+               debugger;
+                var day = parseInt(fecha.substr(0, 2));
+                var month = parseInt(fecha.substr(3, 2));
+                var year = parseInt(fecha.substr(6, 8));
+                $('#date_inicio').datepicker('setStartDate', new Date(year, (month - 1), day));
+
+           }
+
+
+    });
+
 
 
 }

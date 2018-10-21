@@ -45,6 +45,7 @@
 		}
        public function RecuperarFecha($idActividad){
 			$sql="CALL `SP_SUBTAREA_RECUPERAR_FECHA`('$idActividad');";
+
 			return ejecutarConsultaSimpleFila($sql);
 		}
 

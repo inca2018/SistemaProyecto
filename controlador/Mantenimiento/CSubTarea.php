@@ -153,6 +153,7 @@
 
      case 'RecuperarFecha':
 			$rspta=$mantenimiento->RecuperarFecha($idActividad);
+
          echo json_encode($rspta);
       break;
 
