@@ -20,7 +20,7 @@
         <!-- <div class="content-heading">
               <div>Mantenimiento SubTareas</div>
             </div> -->
-        <input type="hidden" id="idProyecto" value="<?php echo $_POST['idProyecto'];?>">
+        <input type="hidden" id="idProyecto" name="idProyecto"  value="<?php echo $_POST['idProyecto'];?>">
         <input type="hidden" name="idActividad" id="idActividad" value="<?php echo $_POST['idActividad'];?>">
         <!-- START card-->
         <div class="card card-default m-1 ">
@@ -49,9 +49,10 @@
                                         <tr>
                                             <th data-priority="1">#</th>
                                             <th>ESTADO</th>
-                                            <th>DESCRIPCION</th>
-                                            <th>HORAS REALIZADAS</th>
+                                            <th>ACTIVIDAD</th>
                                             <th>TAREA</th>
+                                            <th>DESCRIPCIÓN</th>
+                                            <th>F.INICIO-F.FIN</th>
                                             <th>FECHA REGISTRO</th>
                                             <th>ACCION</th>
                                         </tr>
@@ -101,14 +102,15 @@
                         <div class="col-md-12   bl">
 
                             <div class="row">
-
+                                <div class="col-md-12">
+                                            <label for="ClienteNombre" class="col-form-label">Tarea<span class="red">*</span>:</label>
+                                            <input class="form-control validarPanel" id="TareaNombre" name="TareaNombre" data-message="- Campo  Nombre de Tarea"  placeholder="Nombre de Tarea" type="text" maxlength="150">
+                                </div>
                                 <div class="col-md-12">
                                     <label for="SubTareaDescripcion" class="col-form-label">Descripción de Tarea:</label>
-                                    <textarea id="SubTareaDescripcion" name="SubTareaDescripcion" rows="4" class="form-control text-left validarPanel" data-message="- Campo  Descripción de SubTarea">
+                                    <textarea id="SubTareaDescripcion" name="SubTareaDescripcion" rows="4" class="form-control text-left validarPanel" data-message="- Campo  Descripción de Tarea">
                                     </textarea>
                                 </div>
-
-
                                 <div class="col-md-4">
                                    <label class="col-form-label">Fecha Inicio:</label>
                                    <div class="input-group date" id="date_inicio" >

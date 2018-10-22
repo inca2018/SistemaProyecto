@@ -3,12 +3,10 @@ var tablaSubTarea;
 function init() {
     var idActividad = $("#idActividad").val();
     Iniciar_Componentes();
-    //Listar_SubTarea(idActividad);
+    Listar_SubTarea(idActividad);
     Listar_Estado();
-    RecuperarFecha(idActividad);
 
 }
-
 
 function Iniciar_Componentes() {
 
@@ -16,11 +14,6 @@ function Iniciar_Componentes() {
     $("#FormularioSubTarea").on("submit", function (e) {
         RegistroSubTarea(e);
     });
-
-}
-
-function RecuperarFecha(idActividad) {
-
 
     $('#date_inicio').datepicker({
         format: 'dd/mm/yyyy',
@@ -48,6 +41,9 @@ function RecuperarFecha(idActividad) {
                 $('#date_inicio').datepicker('setEndDate', new Date(year, (month - 1), day));
             });
 
+}
+
+function RecuperarFecha(idActividad) {
 
     $.post("../../controlador/Mantenimiento/CSubTarea.php?op=RecuperarFecha", {
         "idActividad": idActividad
@@ -55,12 +51,12 @@ function RecuperarFecha(idActividad) {
         data = JSON.parse(data);
         console.log(data);
         var fecha=data.fecha;
-        debugger;
+
         if(fecha=="NO ENCONTRO"){
 
 
            }else{
-               debugger;
+
                 var day = parseInt(fecha.substr(0, 2));
                 var month = parseInt(fecha.substr(3, 2));
                 var year = parseInt(fecha.substr(6, 8));
@@ -70,12 +66,7 @@ function RecuperarFecha(idActividad) {
 
 
     });
-
-
-
 }
-
-
 
 function RegistroSubTarea(event) {
     //cargar(true);
@@ -100,6 +91,10 @@ function RegistroSubTarea(event) {
 function AjaxRegistroSubTarea() {
     var formData = new FormData($("#FormularioSubTarea")[0]);
     console.log(formData);
+    var idProyecto=$("#idProyecto").val();
+    var idActividad=$("#idActividad").val();
+    formData.append("idProyecto",idProyecto);
+    formData.append("idActividad",idActividad);
     $.ajax({
         url: "../../controlador/Mantenimiento/CSubTarea.php?op=AccionSubTarea",
         type: "POST",
@@ -223,6 +218,8 @@ function NuevoSubTarea() {
     $("#ModalSubTarea").modal("show");
     $("#tituloModalSubTarea").empty();
     $("#tituloModalSubTarea").append("Nuevo Tarea:");
+     var idActividad = $("#idActividad").val();
+     RecuperarFecha(idActividad);
 }
 
 function EditarSubTarea(idSubTarea) {
@@ -318,9 +315,13 @@ function ajaxHabilitarSubTarea(idSubTarea) {
 function LimpiarSubTarea() {
     $('#FormularioSubTarea')[0].reset();
     $("#idSubTarea").val("");
-
-}
-
+    $('#date_inicio').datepicker( "option" , {
+        minDate: null,
+        maxDate: null} );
+    $('#date_fin').datepicker( "option" , {
+        minDate: null,
+        maxDate: null} );
+ }
 function Cancelar() {
     LimpiarSubTarea();
     $("#ModalSubTarea").modal("hide");

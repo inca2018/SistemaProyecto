@@ -25,15 +25,13 @@
           }
           return validarDatos($sql);
       }
-      public function RegistroSubTarea($idSubTarea,$SubTareaDescripcion,$SubTareaHoras,$SubTareaEstado,$SubTareaTarea,$login_idLog){
+      public function RegistroSubTarea($idSubTarea,$SubTareaDescripcion,$fechaInicio,$fechaFin,$SubTareaEstado,$idActividad,$idProyecto,$login_idLog,$tareaNombre){
         $sql="";
 
         if($idSubTarea=="" || $idSubTarea==null || empty($idSubTarea)){
-             $sql="CALL  `SP_SUBTAREA_REGISTRO`('$SubTareaDescripcion','$SubTareaHoras','$SubTareaTarea','$SubTareaEstado','$login_idLog');";
-
+             $sql="CALL  `SP_SUBTAREA_REGISTRO`('$SubTareaDescripcion','$fechaInicio','$fechaFin','$SubTareaEstado','$idActividad','$idProyecto','$login_idLog','$tareaNombre');";
         }else{
-
-           $sql="CALL  `SP_SUBTAREA_ACTUALIZAR`('$SubTareaDescripcion','$SubTareaHoras','$SubTareaTarea','$SubTareaEstado','$login_idLog','$idSubTarea');";
+           $sql="CALL  `SP_SUBTAREA_ACTUALIZAR`('$idSubTarea','$SubTareaDescripcion','$fechaInicio','$fechaFin','$SubTareaEstado','$idActividad','$idProyecto','$login_idLog','$tareaNombre');";
         }
 
          return ejecutarConsulta($sql);

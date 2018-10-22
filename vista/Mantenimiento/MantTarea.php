@@ -80,9 +80,9 @@
                                             <th>NOMBRE DE TAREA</th>
                                             <th>PROYECTO</th>
                                             <th>COSTO</th>
-                                            <th>SUBTAREAS</th>
+                                            <th>TAREAS</th>
                                             <th>PARTICIPANTES</th>
-                                            <th>FECHA REGISTRO</th>
+                                            <th>FECHA ACTIVIDAD</th>
                                             <th>ACCION</th>
                                         </tr>
                                     </thead>

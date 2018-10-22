@@ -9,7 +9,6 @@
 	$idSubTarea=isset($_POST["idSubTarea"])?limpiarCadena($_POST["idSubTarea"]):"";
 
 	$SubTareaDescripcion=isset($_POST["SubTareaDescripcion"])?limpiarCadena($_POST["SubTareaDescripcion"]):"";
-    $SubTareaHoras=isset($_POST["SubTareaHoras"])?limpiarCadena($_POST["SubTareaHoras"]):"";
 
 	$SubTareaEstado=isset($_POST["SubTareaEstado"])?limpiarCadena($_POST["SubTareaEstado"]):"";
 
@@ -19,6 +18,19 @@
 
    $idTarea=isset($_POST["idTareaE"])?limpiarCadena($_POST["idTareaE"]):"";
    $idActividad=isset($_POST["idActividad"])?limpiarCadena($_POST["idActividad"]):"";
+   $idProyecto=isset($_POST["idProyecto"])?limpiarCadena($_POST["idProyecto"]):"";
+
+   $fechaInicio=isset($_POST["inicio"])?limpiarCadena($_POST["inicio"]):"";
+   $fechaFin=isset($_POST["fin"])?limpiarCadena($_POST["fin"]):"";
+
+   $tareaNombre=isset($_POST["TareaNombre"])?limpiarCadena($_POST["TareaNombre"]):"";
+
+
+   $date = str_replace('/', '-', $fechaInicio);
+   $fechaInicio = date("Y-m-d", strtotime($date));
+
+   $date = str_replace('/', '-', $fechaFin);
+   $fechaFin = date("Y-m-d", strtotime($date));
 
    function BuscarEstado($reg){
         if($reg->Estado_idEstado=='1' || $reg->Estado_idEstado==1 ){
@@ -40,14 +52,14 @@
         }
     }
     function BuscarAccion($reg){
-        if($reg->Estado_idEstado==1 || $reg->Estado_idEstado==2 ){
+        if($reg->Estado_idEstado==1 || $reg->Estado_idEstado==2 || $reg->Estado_idEstado==5 || $reg->Estado_idEstado==6 || $reg->Estado_idEstado==7){
             return '
 
-            <button type="button" title="Editar" class="btn btn-warning btn-sm" onclick="EditarSubTarea('.$reg->idSubTarea.')"><i class="fa fa-edit"></i></button>
-               <button type="button"  title="Eliminar" class="btn btn-danger btn-sm" onclick="EliminarSubTarea('.$reg->idSubTarea.')"><i class="fa fa-trash"></i></button>
+            <button type="button" title="Editar" class="btn btn-warning btn-sm" onclick="EditarSubTarea('.$reg->idTarea.')"><i class="fa fa-edit"></i></button>
+               <button type="button"  title="Eliminar" class="btn btn-danger btn-sm" onclick="EliminarSubTarea('.$reg->idTarea.')"><i class="fa fa-trash"></i></button>
                ';
-        }elseif($reg->Estado_idEstado==4){
-            return '<button type="button"  title="Habilitar" class="btn btn-info btn-sm" onclick="HabilitarSubTarea('.$reg->idSubTarea.')"><i class="fa fa-sync"></i></button>';
+        }elseif($reg->Estado_idEstado==4 || $reg->Estado_idEstado==8){
+            return '<button type="button"  title="Habilitar" class="btn btn-info btn-sm" onclick="HabilitarSubTarea('.$reg->idTarea.')"><i class="fa fa-sync"></i></button>';
         }
     }
 
@@ -60,29 +72,29 @@
                 if($rspta["Error"]){
                     $rspta["Mensaje"].="Por estas razones no se puede Registrar el SubTarea.";
                 }else{
-                    $RespuestaRegistro=$mantenimiento->RegistroSubTarea($idSubTarea,$SubTareaDescripcion,$SubTareaHoras,$SubTareaEstado,$SubTareaTarea,$login_idLog);
+                    $RespuestaRegistro=$mantenimiento->RegistroSubTarea($idSubTarea,$SubTareaDescripcion,$fechaInicio,$fechaFin,$SubTareaEstado,$idActividad,$idProyecto,$login_idLog,$tareaNombre);
                     if($RespuestaRegistro){
                         $rspta["Registro"]=true;
-                        $rspta["Mensaje"]="SubTarea se registro Correctamente.";
+                        $rspta["Mensaje"]="Tarea se registro Correctamente.";
                     }else{
                         $rspta["Registro"]=false;
-                        $rspta["Mensaje"]="SubTarea no se puede registrar comuniquese con el area de soporte.";
+                        $rspta["Mensaje"]="Tarea no se puede registrar comuniquese con el area de soporte.";
                     }
                 }
             }else{
 
 
                 if($rspta["Error"]){
-                    $rspta["Mensaje"].="Por estas razones no se puede Registrar el SubTarea.";
+                    $rspta["Mensaje"].="Por estas razones no se puede Registrar el Tarea.";
                 }else{
 
-                    $RespuestaRegistro=$mantenimiento->RegistroSubTarea($idSubTarea,$SubTareaDescripcion,$SubTareaHoras,$SubTareaEstado,$SubTareaTarea,$login_idLog);
+                    $RespuestaRegistro=$mantenimiento->RegistroSubTarea($idSubTarea,$SubTareaDescripcion,$fechaInicio,$fechaFin,$SubTareaEstado,$idActividad,$idProyecto,$login_idLog,$tareaNombre);
                     if($RespuestaRegistro){
                         $rspta["Registro"]=true;
-                        $rspta["Mensaje"]="SubTarea se Actualizo Correctamente.";
+                        $rspta["Mensaje"]="Tarea se Actualizo Correctamente.";
                     }else{
                         $rspta["Registro"]=false;
-                        $rspta["Mensaje"]="SubTarea no se puede Actualizar comuniquese con el area de soporte.";
+                        $rspta["Mensaje"]="Tarea no se puede Actualizar comuniquese con el area de soporte.";
                     }
                 }
             }
@@ -113,11 +125,12 @@
          $data[]=array(
                "0"=>'',
                "1"=>BuscarEstado($reg),
-               "2"=>$reg->Descripcion,
-               "3"=>$reg->CantidadHora,
-               "4"=>$reg->NombreTarea,
-               "5"=>$reg->fechaRegistro,
-               "6"=>BuscarAccion($reg)
+               "2"=>$reg->NombreActividad,
+               "3"=>$reg->NombreTarea,
+               "4"=>$reg->Descripcion,
+               "5"=>$reg->fechaInicio." - ".$reg->fechaFin,
+               "6"=>$reg->fechaRegistro,
+               "7"=>BuscarAccion($reg)
             );
          }
          $results = array(
@@ -133,7 +146,7 @@
          /*------ Cuando el usuario ya se esta facturando, ya no se puede eliminar --------*/
          $rspta['Eliminar']=$mantenimiento->Eliminar_SubTarea($idSubTarea,1,$login_idLog);
 
-         $rspta['Eliminar']?$rspta['Mensaje']="SubTarea Eliminado.":$rspta['Mensaje']="SubTarea no se pudo eliminar comuniquese con el area de soporte";
+         $rspta['Eliminar']?$rspta['Mensaje']="Tarea Eliminado.":$rspta['Mensaje']="Tarea no se pudo eliminar comuniquese con el area de soporte";
          echo json_encode($rspta);
       break;
 
@@ -142,7 +155,7 @@
          /*------ Cuando el usuario ya se esta facturando, ya no se puede eliminar --------*/
          $rspta['Eliminar']=$mantenimiento->Eliminar_SubTarea($idSubTarea,2,$login_idLog);
 
-         $rspta['Eliminar']?$rspta['Mensaje']="SubTarea Restablecido.":$rspta['Mensaje']="SubTarea no se pudo Restablecer comuniquese con el area de soporte";
+         $rspta['Eliminar']?$rspta['Mensaje']="Tarea Restablecido.":$rspta['Mensaje']="Tarea no se pudo Restablecer comuniquese con el area de soporte";
          echo json_encode($rspta);
       break;
 

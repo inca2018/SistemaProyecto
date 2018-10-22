@@ -151,10 +151,7 @@ function Volver(idProyecto){
     $.redirect('MantTarea.php', {'idProyecto':idProyecto});
 }
 function AgregarParticipantes(){
-    $("#ModalDisponibles").modal({
-      backdrop: 'static'
-      , keyboard: false
-    });
+
     $("#ModalDisponibles").modal("show");
 }
 

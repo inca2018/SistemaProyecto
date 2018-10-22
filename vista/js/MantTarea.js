@@ -113,7 +113,7 @@ function Listar_Tarea(idProyecto){
         , "columnDefs": [
             {
                "className": "text-center"
-               , "targets": [1,2]
+               , "targets": [1,2,8]
             }
             , {
                "className": "text-left"

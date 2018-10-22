@@ -34,14 +34,14 @@
                                         <table class="table w-100 table-hover table-sm dt-responsive " id="tablaProyecto">
                                             <thead class="thead-light text-center">
                                                 <tr>
-                                                    <th data-priority="1" width="5%">#</th>
+                                                    <th data-priority="1" width="2%">#</th>
                                                     <th width="5%">ESTADO</th>
                                                     <th width="15%">NOMBRE DE PROYECTO</th>
                                                     <th width="10%">PRESUPUESTO</th>
                                                     <th width="10%">CLIENTE</th>
                                                     <th width="15%">JEFE DE PROYECTO</th>
                                                     <th width="10%">ACTIVIDADES</th>
-                                                    <th width="10%">REGISTRO</th>
+                                                    <th width="13%">FECHA DE PROYECTO</th>
                                                     <th width="10%">ACCION</th>
                                                 </tr>
                                             </thead>

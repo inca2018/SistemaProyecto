@@ -123,7 +123,7 @@
                "5"=>"S/. ".number_format($reg->Costo,2),
                "6"=>$reg->CantiSubtareas,
                "7"=>$reg->CantiParticipantes,
-               "8"=>$reg->fechaRegistro,
+               "8"=>$reg->fechaInicio." - ".$reg->fechaFin,
                "9"=>BuscarAccion($reg)
             );
          }

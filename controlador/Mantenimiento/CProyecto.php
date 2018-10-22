@@ -120,7 +120,7 @@
                "4"=>$reg->NombreCliente,
                "5"=>$reg->NombreJefe,
                "6"=>$reg->CantidadTarea,
-               "7"=>$reg->fechaRegistro,
+               "7"=>$reg->fechaInicio." - ".$reg->fechaFin,
                "8"=>BuscarAccion($reg)
             );
          }
