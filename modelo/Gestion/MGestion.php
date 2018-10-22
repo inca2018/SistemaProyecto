@@ -22,11 +22,19 @@
 			return ejecutarConsulta($sql);
 		}
 
-
+		public function RecuperarTareaGestion($idTarea){
+			$sql="CALL `SP_RECUPERAR_PROYECTOS_ASIGNADOS`('$idTarea');";
+			return ejecutarConsulta($sql);
+		}
        public function ListaDisponibilidad($idUsuario){
           $sql="CALL `SP_LISTA_DISPONIBILIDAD`('$idUsuario');";
 			return ejecutarConsulta($sql);
        }
+
+		public function RecuperarInformacionTarea($idTarea){
+			$sql="SELECT * FROM tarea WHERE idTarea='$idTarea';";
+			return ejecutarConsultaSimpleFila($sql);
+		}
 
    }
 

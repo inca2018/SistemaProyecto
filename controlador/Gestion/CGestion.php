@@ -16,9 +16,9 @@
     $Permiso2=isset($_POST["m_gestion"])?limpiarCadena($_POST["m_gestion"]):"";
     $Permiso3=isset($_POST["m_reporte"])?limpiarCadena($_POST["m_reporte"]):"";
 
-    $idPlan=isset($_POST["idPlan"])?limpiarCadena($_POST["idPlan"]):"";
-    $idAlumno=isset($_POST["idAlumno"])?limpiarCadena($_POST["idAlumno"]):"";
-    $idCuota=isset($_POST["idCuota"])?limpiarCadena($_POST["idCuota"]):"";
+   $idProyecto=isset($_POST["idProyecto"])?limpiarCadena($_POST["idProyecto"]):"";
+ 	$idActividad=isset($_POST["idActividad"])?limpiarCadena($_POST["idActividad"]):"";
+	$idTarea=isset($_POST["idTarea"])?limpiarCadena($_POST["idTarea"]):"";
 
 	$login_idLog=$_SESSION['idUsuario'];
 
@@ -172,6 +172,29 @@
          echo json_encode($results);
       break;
 
+	    case 'ListarGestionTarea':
+         $rspta=$gestion->RecuperarTareaGestion($idTarea);
+         $data= array();
+         while ($reg=$rspta->fetch_object()){
+         $data[]=array(
+               "0"=>'',
+               "1"=>$reg->NombreTarea,
+				   "2"=>$reg->Detalle,
+               "3"=>$reg->DiasTotales,
+               "4"=>$reg->DiasGestion,
+
+				   "5"=>$reg->fechaRegistro,
+               "6"=>'<button type="button"  title="Eliminar Gestión" class="btn btn-danger btn-sm" onclick="EliminarGestion('.$reg->idGestionTarea.')"><i class="fa fa-trash"></i></button>'
+            );
+         }
+         $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+            "aaData"=>$data);
+         echo json_encode($results);
+      break;
+
 
     case 'Listar_Cuotas':
          $rspta=$gestion->Listar_Cuotas($idPlan,$idAlumno);
@@ -221,6 +244,12 @@
         $rspta=$gestion->Recuperar_Parametros($idPlan,$idCuota);
         echo json_encode($rspta);
     break;
+	case 'RecuperarInformacionTarea':
+        $rspta=$gestion->RecuperarInformacionTarea($idTarea);
+        echo json_encode($rspta);
+    break;
+
+
 
     case 'RecuperarArbol2':
          $response=Array();
@@ -261,11 +290,13 @@
          while ($reg=$rspta->fetch_object()){
          $data[]=array(
                "0"=>'',
-               "1"=>$reg->NombreProyecto,
-               "2"=>$reg->NombreActividad,
-               "3"=>$reg->NombreTarea,
-               "4"=>$reg->nombreEstado,
-               "5"=>"ACCION"
+				   "1"=>BuscarEstado($reg);
+               "2"=>$reg->NombreProyecto,
+               "3"=>$reg->NombreActividad,
+               "4"=>$reg->NombreTarea,
+               "5"=>$reg->nombreEstado,
+               "6"=>'<button type="button"  title="Gestión" class="btn btn-info btn-sm m-1" onclick="Gestión_Tarea('.$reg->idProyecto.','.$reg->idActividad.','.$reg->idTarea.')"><i class="fas fa-money-bill-alt fa-lg"></i>
+            </button>'
             );
          }
          $results = array(

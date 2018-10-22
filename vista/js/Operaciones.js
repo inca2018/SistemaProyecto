@@ -80,7 +80,6 @@ function Mostrar_Disponibilidad(){
 		});
 	}).draw();
 }
-
 function Mostrar_Informacion_Persona(){
 	tablaOperacionUsuario = $('#tablaOperaciones2').dataTable({
 		"aProcessing": true,
@@ -168,7 +167,6 @@ $("#total_usuarios").html("<b>"+data.Usuarios+"</b>");
 	});
 
 }
-
 function Listar_Operacion(){
 	tablaOperacion = $('#tablaOperaciones').dataTable({
 		"aProcessing": true,
@@ -238,24 +236,10 @@ function Listar_Operacion(){
 		});
 	}).draw();
 }
-
-function MostrarGestionAlumnos(){
-    $.redirect('../Mantenimiento/MantAlumno.php');
-}
-
-function MostrarGestionApoderados(){
-    $.redirect('../Mantenimiento/MantApoderado.php');
-}
-
-function PagoMatricula(idPlan,idAlumno){
-    $.redirect('../Operaciones/PagoMatricula.php',{'idPlan':idPlan,'idAlumno':idAlumno});
-
-}
-function PagoCuota(idPlan,idAlumno){
-    $.redirect('../Operaciones/PagoCuota.php',{'idPlan':idPlan,'idAlumno':idAlumno});
-}
-
 function verSubtareas(idProyecto,idTarea){
      $.redirect('../Mantenimiento/MantSubTarea.php',{'idTarea':idTarea,'idProyecto':idProyecto});
+}
+function Gestión_Tarea(idProyecto,idActividad,idTarea){
+	  $.redirect('../Operaciones/GestionTarea.php',{'idProyecto':idProyecto,'idActvidad':idActividad,'idTarea':idTarea});
 }
 init();
