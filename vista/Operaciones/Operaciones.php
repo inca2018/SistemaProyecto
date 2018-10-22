@@ -14,6 +14,7 @@
             </div> -->
             <!-- START card-->
              <input type="hidden" id="PerfilCodigo" value="<?php echo $_SESSION['perfil'];?>">
+             <input type="hidden" id="idUsuario" value="<?php echo $_SESSION['idUsuario'];?>">
 
             <div class="card sombra2 ">
                <div class="card-body" id="panel_administrador" style="display:none">
@@ -166,7 +167,6 @@
                             </div>
                         </div>
                         <hr class="mt-2 mb-2">
-
                         <h5 class="mt-3 mb-3 titulo_area" ><em><b>Información de Proyectos:</b></em></h5>
                         <div class="row "  >
                             <div class="col-md-12">
@@ -177,15 +177,10 @@
 
                                                 <tr>
                                                     <th data-priority="1">#</th>
-                                                    <th>ESTADO</th>
-                                                    <th>NOMBRE PROYECTO</th>
-                                                    <th>NOMBRE CLIENTE</th>
-                                                    <th>NOMBRE DE TAREA</th>
-                                                    <th>HORAS ASIGNADAS</th>
-
-                                                    <th>FECHA DE REGISTRO</th>
+                                                    <th>PROYECTOS</th>
+                                                    <th>ACTIVIDADES</th>
+                                                    <th>TAREAS</th>
                                                     <th>ACCION</th>
-
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -196,6 +191,7 @@
                                 </div>
                             </div>
                       </div>
+
                </div>
            </div>
          </div>

@@ -35,7 +35,6 @@
 
 
 
-
    function BuscarEstado($reg){
         if($reg->Estado_idEstado=='1' || $reg->Estado_idEstado==1 ){
             return '<div class="badge badge-success">'.$reg->nombreEstado.'</div>';
@@ -218,12 +217,64 @@
          echo json_encode($rspta);
       break;
 
-   case 'RecuperarInformacion':
-			$rspta=$gestion->Recuperar_Parametros($idPlan,$idCuota);
-         echo json_encode($rspta);
-      break;
+    case 'RecuperarInformacion':
+        $rspta=$gestion->Recuperar_Parametros($idPlan,$idCuota);
+        echo json_encode($rspta);
+    break;
 
+    case 'RecuperarArbol2':
+         $response=Array();
+         $base=Array();
+         $base["text"]='<span class="badge badge-success ml-2 mr-2"><i class="fa fa-star   mr-2 ml-2" aria-hidden="true"></i>PROYECTOS</span>';
+         $rspta_proyectos=$general->Listar_ProyectosDisponibles($login_idLog);
 
+        while($proyectoRecuperado=$rspta_proyectos->fetch_object()){
+            $ProyectoArreglo= Array();
+            $ProyectoArreglo["text"]='<span class="badge badge-info ml-2 mr-2"><i class="fa fa-folder mr-2 ml-2" aria-hidden="true"></i>'.$proyectoRecuperado->NombreProyecto.'</span>';
+
+           $actividadDisponible= $general->ListarActividadesDisponibles($proyectoRecuperado->idProyecto,$login_idLog);
+
+            while($actividadRecuperado=$actividadDisponible->fetch_object()){
+                $ActividadArreglo=Array();
+                $ActividadArreglo["text"]='<span class="badge badge-warning ml-2 mr-2"><i class="fa fa-home   mr-2 ml-2" aria-hidden="true"></i>'.$actividadRecuperado->NombreTarea.'</span> --------------------> '.$actividadRecuperado->nombreEstado;
+                 $rsta_tareas=$gestion->listar_Tareas($actividadRecuperado->idActividad,$proyectoRecuperado->idProyecto,$login_idLog);
+
+                while($tarea=$rsta_tareas->fetch_object()){
+                    $Tarea=Array();
+                    $Tarea["text"]='<span class="badge badge-primary ml-2 mr-2"><i class="fa fa-desktop  mr-2 ml-2" aria-hidden="true"></i>'.$tarea->NombreTarea.'</span> -------------------------------------> Estado: '.$tarea->nombreEstado;
+                    $Actividad["children"][]=$Tarea;
+                }
+
+                $ProyectoArreglo["children"][]=$ActividadArreglo;
+            }
+
+            $base["children"][]=$ProyectoArreglo;
+        }
+         $response[]=$base;
+
+        echo json_encode($response);
+
+     break;
+     case 'MostrarDisponibilidad':
+         $rspta=$gestion->ListaDisponibilidad($login_idLog);
+         $data= array();
+         while ($reg=$rspta->fetch_object()){
+         $data[]=array(
+               "0"=>'',
+               "1"=>$reg->NombreProyecto,
+               "2"=>$reg->NombreActividad,
+               "3"=>$reg->NombreTarea,
+               "4"=>$reg->nombreEstado,
+               "5"=>"ACCION"
+            );
+         }
+         $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+            "aaData"=>$data);
+         echo json_encode($results);
+    break;
    }
 
 

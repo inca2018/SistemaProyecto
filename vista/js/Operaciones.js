@@ -1,24 +1,25 @@
 var tablaOperacion
 var tablaOperacionUsuario;
-
+var arbol2;
+var tablaDisponibilidad;
 function init(){
 
 var perfil=$("#PerfilCodigo").val();
 MostrarVentana(perfil);
 
-
-
 Recuperar_Informacion();
-
 
 }
 
 function MostrarVentana(perfil){
  console.log(perfil);
-if(perfil==6){
+
+if(perfil==10){
     $("#panel_administrador").hide();
     $("#panel_empleado").show();
-    Mostrar_Informacion_Persona();
+    // Mostrar_Informacion_Persona();
+    var idUsuario=$("#idUsuario").val();
+    Mostrar_Disponibilidad();
    }else{
     $("#panel_administrador").show();
     $("#panel_empleado").hide();
@@ -26,6 +27,60 @@ if(perfil==6){
    }
 
 }
+function Mostrar_Disponibilidad(){
+	var groupColumn = 1;
+	tablaDisponibilidad = $('#tablaOperaciones2').dataTable({
+		"aProcessing": true,
+		"aServerSide": true,
+		"processing": true,
+		"paging": true,
+		"searching": true,// Paginacion en tabla
+		"ordering": true, // Ordenamiento en columna de tabla
+		"info": true, // Informacion de cabecera tabla
+		"responsive": true, // Accion de responsive
+	   "ajax": { //Solicitud Ajax Servidor
+			url: '../../controlador/Gestion/CGestion.php?op=MostrarDisponibilidad',
+			type: "POST",
+			dataType: "JSON",
+			error: function (e) {
+				console.log(e);
+			}
+		},
+		"bDestroy": true,
+		 "columnDefs": [
+            { "visible": false, "targets": groupColumn }
+        ],
+       "order": [[ groupColumn, 'asc' ]],
+
+		"drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+
+            api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+                if ( last !== group ) {
+                    $(rows).eq( i ).before(
+                        '<tr class="group text-center"><td colspan="6">'+group+'</td></tr>'
+                    );
+
+                    last = group;
+                }
+            } );
+        },
+		// cambiar el lenguaje de datatable
+		oLanguage: español
+	}).DataTable();
+//Aplicar ordenamiento y autonumeracion , index
+	tablaDisponibilidad.on('order.dt search.dt', function () {
+		tablaDisponibilidad.column(0, {
+			search: 'applied',
+			order: 'applied'
+		}).nodes().each(function (cell, i) {
+			cell.innerHTML = i + 1;
+		});
+	}).draw();
+}
+
 function Mostrar_Informacion_Persona(){
 	tablaOperacionUsuario = $('#tablaOperaciones2').dataTable({
 		"aProcessing": true,
@@ -113,8 +168,6 @@ $("#total_usuarios").html("<b>"+data.Usuarios+"</b>");
 	});
 
 }
-
-
 
 function Listar_Operacion(){
 	tablaOperacion = $('#tablaOperaciones').dataTable({

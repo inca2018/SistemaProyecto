@@ -22,6 +22,12 @@
 			return ejecutarConsulta($sql);
 		}
 
+
+       public function ListaDisponibilidad($idUsuario){
+          $sql="CALL `SP_LISTA_DISPONIBILIDAD`('$idUsuario');";
+			return ejecutarConsulta($sql);
+       }
+
    }
 
 ?>

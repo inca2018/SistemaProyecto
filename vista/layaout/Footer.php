@@ -100,7 +100,7 @@
    <!-- CHART.JS-->
    <script src="<?php echo $conexionConfig->ruta(); ?>vendor/chart.js/dist/Chart.js"></script>
 
-
+   <script src="<?php echo $conexionConfig->ruta(); ?>vendor/treeJS/dist/jstree.min.js"></script>
 
    <script src="<?php echo $conexionConfig->ruta(); ?>vendor/font-awesome/js/all.min.js"></script>
 
