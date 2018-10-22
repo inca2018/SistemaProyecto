@@ -7,7 +7,7 @@ function init(){
 var perfil=$("#PerfilCodigo").val();
 MostrarVentana(perfil);
 
-Recuperar_Informacion();
+ Recuperar_Informacion();
 
 }
 
@@ -155,15 +155,15 @@ function Recuperar_Informacion(){
 	$.post("../../controlador/Gestion/CGestion.php?op=RecuperarInformacion",function(data, status){
 		data = JSON.parse(data);
 		console.log(data);
-$("#total_proyectos").append();
-$("#total_tareas").append();
-$("#total_empleados").append();
-$("#total_usuarios").append();
+		$("#total_proyectos").append();
+		$("#total_tareas").append();
+		$("#total_empleados").append();
+		$("#total_usuarios").append();
 
-$("#total_proyectos").html("<b>"+data.Proyectos+"</b>");
-$("#total_tareas").html("<b>"+data.Tareas+"</b>");
-$("#total_empleados").html("<b>"+data.Empleados+"</b>");
-$("#total_usuarios").html("<b>"+data.Usuarios+"</b>");
+		$("#total_proyectos").html("<b>"+data.Proyectos+"</b>");
+		$("#total_tareas").html("<b>"+data.Tareas+"</b>");
+		$("#total_empleados").html("<b>"+data.Empleados+"</b>");
+		$("#total_usuarios").html("<b>"+data.Usuarios+"</b>");
 	});
 
 }
@@ -239,7 +239,7 @@ function Listar_Operacion(){
 function verSubtareas(idProyecto,idTarea){
      $.redirect('../Mantenimiento/MantSubTarea.php',{'idTarea':idTarea,'idProyecto':idProyecto});
 }
-function Gestión_Tarea(idProyecto,idActividad,idTarea){
-	  $.redirect('../Operaciones/GestionTarea.php',{'idProyecto':idProyecto,'idActvidad':idActividad,'idTarea':idTarea});
+function Gestion_Tarea(idProyecto,idActividad,idTarea){
+	  $.redirect('../Operaciones/GestionTarea.php',{'idProyecto':idProyecto,'idActividad':idActividad,'idTarea':idTarea});
 }
 init();

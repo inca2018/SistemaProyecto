@@ -23,17 +23,18 @@
 	$login_idLog=$_SESSION['idUsuario'];
 
 
-    $PagoTipoPago=isset($_POST["PagoTipoPago"])?limpiarCadena($_POST["PagoTipoPago"]):"";
-    $PagoTipoTarjeta=isset($_POST["PagoTipoTarjeta"])?limpiarCadena($_POST["PagoTipoTarjeta"]):"";
+$detalle=isset($_POST["detalle"])?limpiarCadena($_POST["detalle"]):"";
 
-    $pago_detalle=isset($_POST["pago_detalle"])?limpiarCadena($_POST["pago_detalle"]):"";
-    $numPago=isset($_POST["numPago"])?limpiarCadena($_POST["numPago"]):"";
+$inicio=isset($_POST["inicio"])?limpiarCadena($_POST["inicio"]):"";
 
-    $importePago=isset($_POST["MontoIngreso"])?limpiarCadena($_POST["MontoIngreso"]):"";
-    $importeBase=isset($_POST["importeBase"])?limpiarCadena($_POST["importeBase"]):"";
-    $importeMora=isset($_POST["importeMora"])?limpiarCadena($_POST["importeMora"]):"";
+$fin=isset($_POST["fin"])?limpiarCadena($_POST["fin"]):"";
 
 
+   $date = str_replace('/', '-', $inicio);
+   $inicio = date("Y-m-d", strtotime($date));
+
+   $date = str_replace('/', '-', $fin);
+   $fin = date("Y-m-d", strtotime($date));
 
    function BuscarEstado($reg){
         if($reg->Estado_idEstado=='1' || $reg->Estado_idEstado==1 ){
@@ -182,7 +183,6 @@
 				   "2"=>$reg->Detalle,
                "3"=>$reg->DiasTotales,
                "4"=>$reg->DiasGestion,
-
 				   "5"=>$reg->fechaRegistro,
                "6"=>'<button type="button"  title="Eliminar Gestión" class="btn btn-danger btn-sm" onclick="EliminarGestion('.$reg->idGestionTarea.')"><i class="fa fa-trash"></i></button>'
             );
@@ -241,61 +241,31 @@
       break;
 
     case 'RecuperarInformacion':
-        $rspta=$gestion->Recuperar_Parametros($idPlan,$idCuota);
+        $rspta=$gestion->Recuperar_Parametros();
         echo json_encode($rspta);
     break;
 	case 'RecuperarInformacionTarea':
         $rspta=$gestion->RecuperarInformacionTarea($idTarea);
         echo json_encode($rspta);
     break;
+	case 'RecuperarInformacionFechas':
+        $rspta=$gestion->RecuperarInformacionFechas($idTarea);
+        echo json_encode($rspta);
+    break;
 
 
 
-    case 'RecuperarArbol2':
-         $response=Array();
-         $base=Array();
-         $base["text"]='<span class="badge badge-success ml-2 mr-2"><i class="fa fa-star   mr-2 ml-2" aria-hidden="true"></i>PROYECTOS</span>';
-         $rspta_proyectos=$general->Listar_ProyectosDisponibles($login_idLog);
-
-        while($proyectoRecuperado=$rspta_proyectos->fetch_object()){
-            $ProyectoArreglo= Array();
-            $ProyectoArreglo["text"]='<span class="badge badge-info ml-2 mr-2"><i class="fa fa-folder mr-2 ml-2" aria-hidden="true"></i>'.$proyectoRecuperado->NombreProyecto.'</span>';
-
-           $actividadDisponible= $general->ListarActividadesDisponibles($proyectoRecuperado->idProyecto,$login_idLog);
-
-            while($actividadRecuperado=$actividadDisponible->fetch_object()){
-                $ActividadArreglo=Array();
-                $ActividadArreglo["text"]='<span class="badge badge-warning ml-2 mr-2"><i class="fa fa-home   mr-2 ml-2" aria-hidden="true"></i>'.$actividadRecuperado->NombreTarea.'</span> --------------------> '.$actividadRecuperado->nombreEstado;
-                 $rsta_tareas=$gestion->listar_Tareas($actividadRecuperado->idActividad,$proyectoRecuperado->idProyecto,$login_idLog);
-
-                while($tarea=$rsta_tareas->fetch_object()){
-                    $Tarea=Array();
-                    $Tarea["text"]='<span class="badge badge-primary ml-2 mr-2"><i class="fa fa-desktop  mr-2 ml-2" aria-hidden="true"></i>'.$tarea->NombreTarea.'</span> -------------------------------------> Estado: '.$tarea->nombreEstado;
-                    $Actividad["children"][]=$Tarea;
-                }
-
-                $ProyectoArreglo["children"][]=$ActividadArreglo;
-            }
-
-            $base["children"][]=$ProyectoArreglo;
-        }
-         $response[]=$base;
-
-        echo json_encode($response);
-
-     break;
      case 'MostrarDisponibilidad':
          $rspta=$gestion->ListaDisponibilidad($login_idLog);
          $data= array();
          while ($reg=$rspta->fetch_object()){
          $data[]=array(
                "0"=>'',
-				   "1"=>BuscarEstado($reg);
-               "2"=>$reg->NombreProyecto,
+               "1"=>$reg->NombreProyecto,
+				   "2"=>BuscarEstado($reg),
                "3"=>$reg->NombreActividad,
                "4"=>$reg->NombreTarea,
-               "5"=>$reg->nombreEstado,
-               "6"=>'<button type="button"  title="Gestión" class="btn btn-info btn-sm m-1" onclick="Gestión_Tarea('.$reg->idProyecto.','.$reg->idActividad.','.$reg->idTarea.')"><i class="fas fa-money-bill-alt fa-lg"></i>
+               "5"=>'<button type="button"  title="Gestión" class="btn btn-info btn-sm m-1" onclick="Gestion_Tarea('.$reg->idProyecto.','.$reg->idActividad.','.$reg->idTarea.')"><i class="fas fa-share fa-lg"></i>
             </button>'
             );
          }
@@ -306,7 +276,28 @@
             "aaData"=>$data);
          echo json_encode($results);
     break;
-   }
+     case 'RegistroGestionTarea':
+		 	$rspta=array("Error"=>false,"Mensaje"=>"","Registro"=>false);
+                if($rspta["Error"]){
+                    $rspta["Mensaje"].="Por estas razones no se puede Registrar la Gestión de Tarea.";
+                }else{
+                    $RespuestaRegistro=$gestion->RegistroGestionTarea($idTarea,$detalle,$inicio,$fin,$login_idLog);
+                    if($RespuestaRegistro){
+                        $rspta["Registro"]=true;
+                        $rspta["Mensaje"]="Gestión de Tarea se registro Correctamente.";
+                    }else{
+                        $rspta["Registro"]=false;
+                        $rspta["Mensaje"]="Gestión de Tarea no se puede registrar comuniquese con el area de soporte.";
+                    }
+                }
+
+
+         echo json_encode($rspta);
+       break;
+
+
+	}
+
 
 
 ?>

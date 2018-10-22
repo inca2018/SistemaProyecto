@@ -36,28 +36,44 @@
 				 <hr class="mt-3 mb-3">
                 <h5 class="mt-3 mb-3 titulo_area"><em><b>Información de Tarea:</b></em></h5>
                 <div class="row m-1">
-                    <div class="col-12 col-md-4 br  bb bl bt">
+                    <div class="col-12 col-md-3 br  bb bl bt">
                         <div class="form-group">
                             <label class="text-center w-100  text-muted"><em>Nombre del Tarea:</em></label>
                             <h5 class="text-center " id="tarea_1"><b> </b></h5>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4 br  bb bl bt">
+                    <div class="col-12 col-md-3 br  bb bl bt">
                         <div class="form-group">
                             <label class="text-center w-100 text-muted"><em>Fecha Inicio:</em></label>
                             <h5 class="text-center" id="tarea_2"><b> </b></h5>
                         </div>
                     </div>
-                    <div class="col-12 col-md-4 br  bb bl bt">
+                    <div class="col-12 col-md-3 br  bb bl bt">
                         <div class="form-group">
                             <label class="text-center w-100 text-muted"><em>Fecha Fin:</em></label>
                             <h5 class="text-center" id="tarea_3"><b> </b></h5>
                         </div>
                     </div>
+                     <div class="col-12 col-md-3 br  bb bl bt">
+                        <div class="form-group">
+                            <label class="text-center w-100 text-muted"><em>Dias Asignados:</em></label>
+                            <h5 class="text-center" id="tarea_4"><b> </b></h5>
+                        </div>
+                    </div>
 
                 </div>
 				<hr class="mt-2 mb-2">
-				<h5 class="mt-3 mb-3 titulo_area"><em><b>Información de Tarea:</b></em></h5>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <button class="btn btn-info btn-block btn-sm" onclick="volver();"><i class="fas fa-chevron-circle-left fa-lg mr-2"></i> Operaciones</button>
+                    </div>
+                    <div class="col-md-2 offset-8">
+                        <button class="btn btn-success btn-block btn-sm" onclick="NuevaGestion();"><i class="fa fa-plus fa-lg mr-2"></i> Nueva Registro de Dias</button>
+                    </div>
+                </div>
+            <hr class="mt-2 mb-2">
+				<h5 class="mt-3 mb-3 titulo_area"><em><b>Información de Avance:</b></em></h5>
 				<div class="row ">
 					<div class="col-md-12">
 						<div class="row">
@@ -124,7 +140,7 @@
 
                                 <div class="col-md-12">
                                     <label for="SubTareaDescripcion" class="col-form-label">Detalle de Avance de Tarea:</label>
-                                    <textarea id="SubTareaDescripcion" name="SubTareaDescripcion" rows="4" class="form-control text-left validarPanel" data-message="- Campo  Descripción de Tarea">
+                                    <textarea id="detalle" name="detalle" rows="4" class="form-control text-left validarPanel" data-message="- Campo  Descripción de Tarea">
                                     </textarea>
                                 </div>
                                 <div class="col-md-4">
@@ -153,7 +169,7 @@
                                     <i class="fa fa-save fa-lg mr-2"></i>GUARDAR
                                 </button>
 
-                                <button type="button" class="col-md-2 btn btn-danger btn-sm  offset-8" title="Cancelar" onclick="Cancelar();">
+                                <button type="button" class="col-md-2 btn btn-danger btn-sm  offset-8" title="Cancelar" onclick="CancelarGestion();">
                                     <i class="fa fa-times fa-lg mr-2"></i>CANCELAR
                                 </button>
 

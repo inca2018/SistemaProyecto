@@ -178,6 +178,7 @@
                                                 <tr>
                                                     <th data-priority="1">#</th>
                                                     <th>PROYECTOS</th>
+                                                    <th>ESTADO</th>
                                                     <th>ACTIVIDADES</th>
                                                     <th>TAREAS</th>
                                                     <th>ACCION</th>

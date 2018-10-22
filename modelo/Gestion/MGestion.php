@@ -23,7 +23,7 @@
 		}
 
 		public function RecuperarTareaGestion($idTarea){
-			$sql="CALL `SP_RECUPERAR_PROYECTOS_ASIGNADOS`('$idTarea');";
+			$sql="CALL `SP_GESTION_LISTAR`('$idTarea');";
 			return ejecutarConsulta($sql);
 		}
        public function ListaDisponibilidad($idUsuario){
@@ -32,9 +32,21 @@
        }
 
 		public function RecuperarInformacionTarea($idTarea){
-			$sql="SELECT * FROM tarea WHERE idTarea='$idTarea';";
+			$sql="SELECT NombreTarea,fechaInicio,fechaFin,fechaRegistro,idTarea,TIMESTAMPDIFF(DAY,fechaInicio,fechaFin) AS diasT FROM tarea WHERE idTarea='$idTarea';";
 			return ejecutarConsultaSimpleFila($sql);
 		}
+		public function RecuperarInformacionFechas($idTarea){
+			$sql="CALL `SP_GESTION_RECUPERAR_FECHAS`('$idTarea');";
+			return ejecutarConsultaSimpleFila($sql);
+		}
+
+		public function RegistroGestionTarea($idTarea,$detalle,$inicio,$fin,$login_idLog){
+			 $sql="CALL `SP_GESTION_REGISTRO`('$idTarea','$detalle','$inicio','$fin','$login_idLog');";
+
+			return ejecutarConsulta($sql);
+		}
+
+
 
    }
 
