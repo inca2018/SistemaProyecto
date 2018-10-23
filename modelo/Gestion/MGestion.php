@@ -40,11 +40,24 @@
 			return ejecutarConsultaSimpleFila($sql);
 		}
 
+      public function RecuperarReporteFechas($fechaInicio,$fechFin,$idProyecto){
+			$sql="CALL `SP_GESTION_RECUPERAR_INDICADORES2`('$fechaInicio','$fechFin','$idProyecto');";
+			return ejecutarConsultaSimpleFila($sql);
+		}
+		 public function RecuperarReporte($fechaInicio,$fechFin,$idProyecto){
+			$sql="CALL `SP_REPORTE_1`('$fechaInicio','$fechFin','$idProyecto');";
+			return ejecutarConsulta($sql);
+		}
 		public function RegistroGestionTarea($idTarea,$detalle,$inicio,$fin,$login_idLog){
 			 $sql="CALL `SP_GESTION_REGISTRO`('$idTarea','$detalle','$inicio','$fin','$login_idLog');";
 
 			return ejecutarConsulta($sql);
 		}
+     public function RecuperarActividades($idProyecto){
+		  $sql="SELECT ac.idActividad,ac.NombreTarea FROM proyecto pro INNER JOIN actividad ac On ac.Proyecto_idProyecto=pro.idProyecto where pro.idProyecto=$idProyecto";
+		  return ejecutarConsulta($sql);
+	  }
+
 
 
 

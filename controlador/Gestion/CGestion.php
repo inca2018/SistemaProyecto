@@ -22,13 +22,11 @@
 
 	$login_idLog=$_SESSION['idUsuario'];
 
+	$detalle=isset($_POST["detalle"])?limpiarCadena($_POST["detalle"]):"";
 
-$detalle=isset($_POST["detalle"])?limpiarCadena($_POST["detalle"]):"";
+	$inicio=isset($_POST["inicio"])?limpiarCadena($_POST["inicio"]):"";
 
-$inicio=isset($_POST["inicio"])?limpiarCadena($_POST["inicio"]):"";
-
-$fin=isset($_POST["fin"])?limpiarCadena($_POST["fin"]):"";
-
+	$fin=isset($_POST["fin"])?limpiarCadena($_POST["fin"]):"";
 
    $date = str_replace('/', '-', $inicio);
    $inicio = date("Y-m-d", strtotime($date));
@@ -255,6 +253,10 @@ $fin=isset($_POST["fin"])?limpiarCadena($_POST["fin"]):"";
         $rspta=$gestion->RecuperarInformacionFechas($idTarea);
         echo json_encode($rspta);
     break;
+    case 'RecuperarReporteFechas':
+			$rspta=$gestion->RecuperarReporteFechas($inicio,$fin,$idProyecto);
+         echo json_encode($rspta);
+      break;
 
 
 
@@ -297,6 +299,22 @@ $fin=isset($_POST["fin"])?limpiarCadena($_POST["fin"]):"";
 
          echo json_encode($rspta);
        break;
+		case 'RecuperarReporte':
+		   $response=Array();
+			$respuesta=$gestion->RecuperarReporte($inicio,$fin,$idProyecto);
+
+			while ($Actividad=$respuesta->fetch_object()){
+				$temporal=array();
+				$temporal["actividad"]=$Actividad->campo1;
+				$temporal["fecha"]=$Actividad->campo2;
+				$temporal["presupuesto"]=$Actividad->campo3;
+				$temporal["avance"]=$Actividad->campo4;
+				$temporal["noavance"]=$Actividad->campo5;
+				$response[]=$temporal;
+			}
+
+		   echo json_encode($response);
+		break;
 
 
 	}

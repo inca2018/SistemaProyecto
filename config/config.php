@@ -25,8 +25,10 @@ if (!function_exists('ejecutarConsulta')){
 
    function ejecutarConsultaSimpleFila($sql){
       global $conexion;
+
       $query = $conexion->query($sql);
       $row = $query->fetch_assoc();
+
       return $row;
 	}
 
