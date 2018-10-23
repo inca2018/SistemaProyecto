@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 22-10-2018 a las 23:10:09
--- Versión del servidor: 5.7.19
--- Versión de PHP: 5.6.31
+-- Tiempo de generación: 23-10-2018 a las 02:09:38
+-- Versión del servidor: 5.7.21
+-- Versión de PHP: 5.6.35
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -231,17 +231,21 @@ DROP PROCEDURE IF EXISTS `SP_GESTION_INFORMACION_AVANCE`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GESTION_INFORMACION_AVANCE` ()  NO SQL
 BEGIN
 
-SELECT
-pro.NombreProyecto,
-cli.NombreCliente,
-ac.NombreTarea as NombreActividad,
-(SELECT COUNT(*) FROM participacion par2 INNER JOIN actividad ac2 ON ac2.Participacion_idParticipacion=par2.idParticipacion WHERE par2.Actividad_idActividad=ac.idActividad) as CantidadParticipantes,
-ta.NombreTarea as NombreTarea,
-tg.DiasTotales,
-tg.DiasGestion,
-(SELECT if(tg2.DiasTotales=0,0,IF(tg2.DiasTotales>SUM(tg2.DiasGestion),tg2.DiasTotales/SUM(tg2.DiasGestion),0))  FROM tareagestion tg2 INNER JOIN tarea ta2 ON ta2.idTarea=tg2.Tarea_idTarea
- where ta2.idTarea=ta2.idTarea) as Avance
-FROM proyecto pro LEFT JOIN  actividad ac ON ac.Proyecto_idProyecto=pro.idProyecto LEFT JOIN tarea ta On ta.Actividad_idActividad=ac.idActividad LEFT JOIN tareagestion tg ON tg.Tarea_idTarea=ta.idTarea LEFT JOIN cliente cli ON cli.idCliente=pro.Cliente_idCliente GROUP BY ac.idActividad;
+SELECT pro.NombreProyecto,
+(SELECT COUNT(DISTINCT(par.Persona_idPersona)) FROM participacion par INNER JOIN actividad act ON act.idActividad=par.Actividad_idActividad where act.Proyecto_idProyecto=pro.idProyecto) as CantidadParticipantes,
+
+(SELECT COUNT(*) FROM actividad ac1 where ac1.Proyecto_idProyecto=pro.idProyecto) as CantidadActividades,
+
+(SELECT COUNT(*) FROM actividad ac2 inner join tarea ta2 ON ta2.Actividad_idActividad=ac2.idActividad where ac2.Proyecto_idProyecto=pro.idProyecto) as CantidadTareas,
+
+(TIMESTAMPDIFF(DAY,pro.fechaInicio,pro.fechaFin)) as Diasproyecto,
+
+IFNULL((SELECT SUM(tg.DiasGestion) FROM actividad ac3 INNER JOIN tarea ta3 On ta3.Actividad_idActividad=ac3.idActividad INNER JOIN tareagestion tg On tg.Tarea_idTarea=ta3.idTarea where ac3.Proyecto_idProyecto=pro.idProyecto),'0')as DiasGestion,
+
+(SELECT SUM(ac5.Costo) FROM actividad ac5 WHERE ac5.Proyecto_idProyecto=pro.idProyecto) as CostoTotalProyecto
+
+FROM proyecto pro LEFT JOIN actividad ac ON ac.Proyecto_idProyecto=pro.idProyecto GROUP BY pro.idProyecto ;
+ 
 
 END$$
 
@@ -781,22 +785,36 @@ DROP PROCEDURE IF EXISTS `SP_RECUPERAR_INDICADORES`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_RECUPERAR_INDICADORES` (IN `idProyec` INT(11))  NO SQL
 BEGIN
 
-SELECT
+SELECT pro.NombreProyecto,
+(SELECT COUNT(DISTINCT(par.Persona_idPersona)) FROM participacion par INNER JOIN actividad act ON act.idActividad=par.Actividad_idActividad where act.Proyecto_idProyecto=pro.idProyecto) as CantidadParticipantes,
 
-IFNULL(SUM(ta.CantidadHoras),'0') as HorasProgramadas,
-IFNULL(SUM(sub.CantidadHora),'0') as HorasRealizadas,
+(SELECT COUNT(*) FROM actividad ac1 where ac1.Proyecto_idProyecto=pro.idProyecto) as CantidadActividades,
 
-IFNULL(SUM(ta.Costo),'0.00') as CostoPresupuestado,
+(SELECT COUNT(*) FROM actividad ac2 inner join tarea ta2 ON ta2.Actividad_idActividad=ac2.idActividad where ac2.Proyecto_idProyecto=pro.idProyecto) as CantidadTareas,
 
-IFNULL((ROUND((SUM(ta.Costo)/SUM(ta.CantidadHoras))*SUM(sub.CantidadHora),2)) ,'0') as CostoRealizado,
+(TIMESTAMPDIFF(DAY,pro.fechaInicio,pro.fechaFin)) as HorasProgramadas,
 
-IFNULL((ROUND(SUM(ta.Costo)-(SUM(ta.Costo)/SUM(ta.CantidadHoras))*SUM(sub.CantidadHora),2)) ,'0') as CostoNoRealizado,
+IFNULL((SELECT SUM(tg.DiasGestion) FROM actividad ac3 INNER JOIN tarea ta3 On ta3.Actividad_idActividad=ac3.idActividad INNER JOIN tareagestion tg On tg.Tarea_idTarea=ta3.idTarea where ac3.Proyecto_idProyecto=pro.idProyecto),'0')as HorasRealizadas,
 
-IFNULL(ROUND((SUM(sub.CantidadHora)*100)/SUM(ta.CantidadHoras) ,2),'0') as PorcentajeAvance,
+(SELECT SUM(ac5.Costo) FROM actividad ac5 WHERE ac5.Proyecto_idProyecto=pro.idProyecto) as CostoPresupuestado,
 
-IFNULL(ROUND(100-(SUM(sub.CantidadHora)*100)/SUM(ta.CantidadHoras) ,2),'0') as PorcentajeNoAvance
+IFNULL(((SELECT SUM(tg.DiasGestion) FROM actividad ac3 INNER JOIN tarea ta3 On ta3.Actividad_idActividad=ac3.idActividad INNER JOIN tareagestion tg On tg.Tarea_idTarea=ta3.idTarea where ac3.Proyecto_idProyecto=pro.idProyecto)*100)/(TIMESTAMPDIFF(DAY,pro.fechaInicio,pro.fechaFin)),'0') as PorcentajeAvance,
 
-FROM proyecto pro LEFT JOIN tarea ta ON ta.idTarea=pro.idProyecto LEFT JOIN subtarea sub ON sub.Tarea_idTarea=ta.idTarea WHERE pro.idProyecto=idProyec GROUP BY pro.idProyecto;
+IFNULL(100-((SELECT SUM(tg.DiasGestion) FROM actividad ac3 INNER JOIN tarea ta3 On ta3.Actividad_idActividad=ac3.idActividad INNER JOIN tareagestion tg On tg.Tarea_idTarea=ta3.idTarea where ac3.Proyecto_idProyecto=pro.idProyecto)*100)/(TIMESTAMPDIFF(DAY,pro.fechaInicio,pro.fechaFin)),'0') as PorcentajeNoAvance
+
+FROM proyecto pro LEFT JOIN actividad ac ON ac.Proyecto_idProyecto=pro.idProyecto
+WHERE pro.idProyecto=idProyec
+GROUP BY pro.idProyecto ;
+ 
+
+END$$
+
+DROP PROCEDURE IF EXISTS `SP_RECUPERAR_INDICADOR_FECHAS`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_RECUPERAR_INDICADOR_FECHAS` ()  NO SQL
+BEGIN 
+
+
+SELECT pro.NombreProyecto,ac.NombreTarea FROM proyecto pro INNER JOIN actividad ac ON ac.Proyecto_idProyecto=pro.idProyecto;
 
 
 END$$
@@ -808,7 +826,7 @@ BEGIN
 
 SET Proyectos=(SELECT COUNT(*) FROM proyecto);
 SET Tareas=(SELECT COUNT(*) FROM tarea);
-SET Empleados=(SELECT COUNT(*) FROM usuario u WHERE u.Perfil_idPerfil=6);
+SET Empleados=(SELECT COUNT(*) FROM usuario u WHERE u.Perfil_idPerfil=10);
 
 SET Usuarios=(SELECT COUNT(*) FROM usuario);
 
@@ -1907,7 +1925,7 @@ CREATE TABLE IF NOT EXISTS `login` (
 --
 
 INSERT INTO `login` (`idLogin`, `Usuario_idUsuario`, `usuarioLog`, `passwordLog`, `perfilLog`, `fechaLog`, `ip`, `fechaLogout`) VALUES
-(1, 1, 'admin', '$2a$08$RCuzW/8g2Lg4QMNCfmsa/uKp33rvDmdWrC.P40DOECJlMtPu16NMW', 'Administrador', '2018-09-29 14:03:44', '::1', '2018-10-22 11:46:56');
+(1, 1, 'admin', '$2a$08$RCuzW/8g2Lg4QMNCfmsa/uKp33rvDmdWrC.P40DOECJlMtPu16NMW', 'Administrador', '2018-09-29 14:03:44', '::1', '2018-10-22 19:42:20');
 
 -- --------------------------------------------------------
 
@@ -2330,7 +2348,7 @@ INSERT INTO `tarea` (`idTarea`, `NombreTarea`, `Descripcion`, `fechaRegistro`, `
 (41, 'TAREA 2', 'TAREA 2', '2018-10-21 22:33:49', '2018-11-20', '2018-11-22', 28, 7),
 (42, 'TAREA 1', 'TAREA 1', '2018-10-21 22:34:33', '2018-11-22', '2018-11-30', 29, 7),
 (43, 'TAREA 1', 'TAREA 1', '2018-10-21 22:34:54', '2018-11-30', '2018-12-13', 30, 6),
-(44, 'TAREA 1', 'TAREA 1', '2018-10-21 22:38:37', '2018-10-16', '2018-10-30', 31, 5),
+(44, 'TAREA 1', 'TAREA 1', '2018-10-21 22:38:37', '2018-10-16', '2018-10-30', 31, 7),
 (45, 'TAREA 1', 'TAREA 1', '2018-10-21 22:38:55', '2018-10-30', '2018-11-06', 32, 5),
 (46, 'TAREA 1', 'TAREA 1', '2018-10-21 22:39:14', '2018-11-06', '2018-11-14', 33, 5),
 (47, 'TAREA 1', 'TAREA 1', '2018-10-21 22:40:13', '2018-11-14', '2018-11-17', 34, 5),
@@ -2356,7 +2374,7 @@ CREATE TABLE IF NOT EXISTS `tareagestion` (
   PRIMARY KEY (`idGestionTarea`),
   KEY `FK_TareaGestion` (`Tarea_idTarea`),
   KEY `FK_PersonTareaGestion` (`Persona_idPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tareagestion`
@@ -2371,7 +2389,8 @@ INSERT INTO `tareagestion` (`idGestionTarea`, `Tarea_idTarea`, `Persona_idPerson
 (7, 40, 45, 4, 2, '2018-11-16', '2018-11-18', 'fwefwef', '2018-10-22'),
 (8, 41, 45, 2, 2, '2018-11-20', '2018-11-22', 'wfwef', '2018-10-22'),
 (9, 42, 45, 8, 8, '2018-11-22', '2018-11-30', 'wfwefwef', '2018-10-22'),
-(10, 43, 45, 13, 5, '2018-11-30', '2018-12-05', 'wfwef', '2018-10-22');
+(10, 43, 45, 13, 5, '2018-11-30', '2018-12-05', 'wfwef', '2018-10-22'),
+(11, 44, 45, 14, 14, '2018-10-16', '2018-10-30', 'cascasas', '2018-10-22');
 
 -- --------------------------------------------------------
 
