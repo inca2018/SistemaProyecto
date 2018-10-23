@@ -151,7 +151,7 @@ $.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores",{'idProy
 										"#6BE030",
 
 									],
-									data : [parseFloat(costoRealizado),parseFloat(costoPendiente)]
+									data : [parseFloat(costoPendiente),parseFloat(costoRealizado)]
 								};
 		datos.data.datasets.push(newData);
 		window.pie.update();
@@ -165,7 +165,7 @@ $.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores",{'idProy
 										"#6BE030",
 
 									],
-									data : [parseFloat(porcAvance),parseFloat(porcNoAvance)]
+									data : [parseFloat(porcNoAvance),parseFloat(porcAvance)]
 								};
 		datos2.data.datasets.push(newData);
 		window.pie2.update();
