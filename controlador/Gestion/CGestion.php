@@ -132,12 +132,15 @@ $fin=isset($_POST["fin"])?limpiarCadena($_POST["fin"]):"";
          $data[]=array(
                "0"=>'',
                "1"=>$reg->NombreProyecto,
-               "2"=>$reg->NumeroTareas,
-               "3"=>$reg->HorasProgramadas,
-               "4"=>$reg->HorasRealizadas,
-               "5"=>"S/. ".number_format($reg->CostoPresupuestado,2),
-               "6"=>"S/. ".number_format($reg->CostoRealizado,2),
-               "7"=>$reg->PorcentajeAvance
+               "2"=>$reg->CantidadParticipantes,
+               "3"=>$reg->CantidadActividades,
+               "4"=>$reg->CantidadTareas,
+               "5"=>$reg->Diasproyecto." Dias",
+               "6"=>"S/. ".number_format($reg->CostoTotalProyecto,2),
+               "7"=>"S/. ".number_format(($reg->CostoTotalProyecto/$reg->Diasproyecto)*$reg->DiasGestion,2),
+               "8"=>"S/. ".number_format(($reg->CostoTotalProyecto/$reg->Diasproyecto)*($reg->Diasproyecto-$reg->DiasGestion),2),
+               "9"=>number_format((($reg->DiasGestion*100)/$reg->Diasproyecto),2)." %",
+               "10"=>number_format(100-(($reg->DiasGestion*100)/$reg->Diasproyecto),2)." %"
 
             );
          }

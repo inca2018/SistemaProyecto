@@ -113,13 +113,18 @@ $.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores",{'idProy
       data = JSON.parse(data);
 		console.log(data);
 
-    var horasNoProgramadas = parseInt(data.HorasProgramadas);
+    var horasProgramadas = parseInt(data.HorasProgramadas);
     var horasRealizadas = parseInt(data.HorasRealizadas);
     var costoPresupuesto = parseInt(data.CostoPresupuestado);
     var costoRealizado = parseInt(data.CostoRealizado);
     var costoNoRealizado = parseInt(data.CostoNoRealizado);
     var porcAvance = parseInt(data.PorcentajeAvance);
     var porcNoAvance = parseInt(data.PorcentajeNoAvance);
+
+    var costoDia=parseFloat(costoPresupuesto/horasProgramadas);
+    var costoRealizado=parseFloat(costoDia*horasRealizadas);
+     var costoPendiente=parseFloat(costoDia*(horasProgramadas-horasRealizadas));
+    var DiaPend=horasProgramadas-horasRealizadas;
 
      $("#variable1").append();
      $("#variable2").append();
@@ -129,11 +134,11 @@ $.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores",{'idProy
      $("#variable6").append();
      $("#variable7").append();
 
-     $("#variable1").html("<b>"+horasNoProgramadas+" h.</b>");
-     $("#variable2").html("<b>"+horasRealizadas+"h.</b>");
+     $("#variable1").html("<b>"+DiaPend+" Dias</b>");
+     $("#variable2").html("<b>"+horasRealizadas+" Dias</b>");
      $("#variable3").html("<b>S/. "+Formato_Moneda(costoPresupuesto,2)+"</b>");
      $("#variable4").html("<b>S/. "+Formato_Moneda(costoRealizado,2)+"</b>");
-     $("#variable5").html("<b>S/. "+Formato_Moneda(costoNoRealizado,2)+"</b>");
+     $("#variable5").html("<b>S/. "+Formato_Moneda(costoPendiente,2)+"</b>");
      $("#variable6").html("<b>"+porcAvance+" %</b>");
      $("#variable7").html("<b>"+porcNoAvance+" %</b>");
 
@@ -146,7 +151,7 @@ $.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores",{'idProy
 										"#6BE030",
 
 									],
-									data : [costoRealizado,costoNoRealizado]
+									data : [parseFloat(costoRealizado),parseFloat(costoPendiente)]
 								};
 		datos.data.datasets.push(newData);
 		window.pie.update();
@@ -160,7 +165,7 @@ $.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores",{'idProy
 										"#6BE030",
 
 									],
-									data : [porcAvance,porcNoAvance]
+									data : [parseFloat(porcAvance),parseFloat(porcNoAvance)]
 								};
 		datos2.data.datasets.push(newData);
 		window.pie2.update();

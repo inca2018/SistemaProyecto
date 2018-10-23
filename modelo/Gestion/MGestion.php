@@ -14,7 +14,7 @@
 			return ejecutarConsultaSimpleFila($sql);
 		}
        	public function Recuperar_Informacion_proyectos(){
-			$sql="CALL `SP_RECUPERAR_PROYECTOS`();";
+			$sql="CALL `SP_GESTION_INFORMACION_AVANCE`();";
 			return ejecutarConsulta($sql);
 		}
        public function Recuperar_Informacion_Usuario($idUsuario){

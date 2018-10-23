@@ -136,18 +136,21 @@
                             <div class="col-md-12">
                                 <div class="row">
                                    <div class="col-md-12">
-                                        <table class="table w-100 table-hover table-sm dt-responsive nowrap" id="tablaOperaciones" style="font-size:13px">
+                                        <table class="table w-100 table-hover table-sm dt-responsive " id="tablaOperaciones" style="font-size:13px">
                                             <thead class="thead-light text-center">
 
                                                 <tr>
                                                     <th data-priority="1">#</th>
                                                     <th>PROYECTOS</th>
-                                                    <th>N° DE TAREAS</th>
-                                                    <th>HORAS PROGRAMADAS</th>
-                                                    <th>HORAS TRABAJADAS</th>
-                                                    <th>COSTO PRESUPUESTADO</th>
-                                                    <th>COSTO REALIZADO</th>
+                                                    <th>PARTICIPANTES</th>
+                                                    <th>ACTIVIDADES</th>
+                                                    <th>TAREAS</th>
+                                                    <th>DURACIÓN</th>
+                                                    <th>PRESUPUESTO</th>
+                                                    <th>COSTO AVANCE</th>
+                                                    <th>COSTO PENDIENTE</th>
                                                     <th>% AVANCE</th>
+                                                    <th>% PENDIENTE</th>
 
                                                 </tr>
                                             </thead>

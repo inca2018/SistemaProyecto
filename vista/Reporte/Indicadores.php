@@ -38,13 +38,13 @@
                             <div class="row">
  										<div class="col-12 col-md-4 br  ">
 												<div class="form-group">
-												  <label class="text-center w-100  text-muted"><em>Horas no Programadas:</em></label>
+												  <label class="text-center w-100  text-muted"><em>Dias Pendientes:</em></label>
 													<h5 class="text-center " id="variable1" ><b> </b></h5>
 												</div>
 										</div>
 										<div class="col-12 col-md-4 br">
 												<div class="form-group">
-													<label class="text-center w-100 text-muted"><em>Horas Realizadas:</em></label>
+													<label class="text-center w-100 text-muted"><em>Dias Realizadas:</em></label>
 													<h5 class="text-center" id="variable2"><b> </b></h5>
 												</div>
 										</div>
