@@ -241,13 +241,14 @@ function RecuperarSubTarea(idSubTarea) {
         data = JSON.parse(data);
         console.log(data);
 
-        $("#idSubTarea").val(data.idSubTarea);
-        $("#SubTareaNombre").val(data.NombreSubTarea);
-        $("#SubTareaHoras").val(data.CantidadHora);
+        $("#idSubTarea").val(data.idTarea);
+        $("#TareaNombre").val(data.NombreTarea);
+
         $("#SubTareaDescripcion").val(data.Descripcion);
 
         $("#SubTareaEstado").val(data.Estado_idEstado);
-
+        $("#inicio").val(data.fechaInicio);
+        $("#fin").val(data.fechaFin);
 
     });
 }
