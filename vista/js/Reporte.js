@@ -215,8 +215,8 @@ function detalles1(){
     if(inicio=='' || fin=='' || idPro==''){
          swal("Error!", "Seleccione todos los indicadores para buscar reporte!.", "warning");
     }else{
-        $('#modal_detalles1').modal({backdrop: 'static', keyboard: false})
-        $("#modal_detalles1").modal('show');
+        $('#modal_detalles2').modal({backdrop: 'static', keyboard: false})
+        $("#modal_detalles2").modal('show');
 
        mostrar_Tabla_detalles1(inicio,fin,idPro);
     }
@@ -230,8 +230,8 @@ function detalles2(){
     if(inicio=='' || fin=='' || idPro==''){
       swal("Error!", "Seleccione todos los indicadores para buscar reporte!.", "warning");
     }else{
-        $('#modal_detalles2').modal({backdrop: 'static', keyboard: false})
-        $("#modal_detalles2").modal('show');
+        $('#modal_detalles1').modal({backdrop: 'static', keyboard: false})
+        $("#modal_detalles1").modal('show');
 
        mostrar_Tabla_detalles2(inicio,fin,idPro);
     }
@@ -257,8 +257,8 @@ function mostrar_Tabla_detalles1(inicio,fin,idp){
          cuerpo=cuerpo+"<tr><th>"+corre+"</th><th class='text-center'>"+actividad+"</th><th class='text-center'>"+fecha+"</th><th class='text-center'>"+verificar(parseFloat(presupuesto))+"</th><th class='text-center'>"+verificar(parseFloat(avance/100))+"</th><th class='text-center'>"+verificar(parseFloat(presupuesto)*parseFloat(avance/100))+"</th></tr>";
         }
 
-        $("#body_detalles1").empty();
-        $("#body_detalles1").append(cuerpo);
+        $("#body_detalles2").empty();
+        $("#body_detalles2").append(cuerpo);
 
 
    });
@@ -285,8 +285,8 @@ function mostrar_Tabla_detalles2(inicio,fin,ipd){
          cuerpo2=cuerpo2+"<tr><th>"+corre+"</th><th class='text-center'>"+actividad+"</th><th class='text-center'>"+fecha+"</th><th class='text-center'>"+verificar(parseFloat(presupuesto)*parseFloat(avance/100))+"</th><th class='text-center'>"+verificar(parseFloat(presupuesto))+"</th><th class='text-center'>"+verificar( parseFloat((parseFloat(presupuesto)*parseFloat(avance/100))/(verificar(parseFloat(presupuesto)))).toFixed(2) )+"</th></tr>";
         }
 
-        $("#body_detalles2").empty();
-        $("#body_detalles2").append(cuerpo2);
+        $("#body_detalles1").empty();
+        $("#body_detalles1").append(cuerpo2);
 
 
 

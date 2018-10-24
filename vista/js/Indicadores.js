@@ -3,172 +3,161 @@ var datos2;
 var config;
 var config2;
 
-function init(){
+function init() {
     Listar_Proyectos();
 
     Mostrar_Indicadores1();
     Mostrar_Indicadores2();
 }
 
-function buscar_reporte(){
-    var idProyecto=$("#SeleccionProyecto").val();
-    if(idProyecto==0 || idProyecto=='0'){
+function buscar_reporte() {
+    var idProyecto = $("#SeleccionProyecto").val();
+    if (idProyecto == 0 || idProyecto == '0') {
         notificar_warning("Seleccione Proyecto para visualizar información.");
-    }else{
+    } else {
         accion(idProyecto);
     }
 
 }
 
-function Listar_Proyectos(){
-	 $.post("../../controlador/Reporte/CReporte.php?op=listar_Proyectos", function (ts) {
-      $("#SeleccionProyecto").append(ts);
-   });
+function Listar_Proyectos() {
+    $.post("../../controlador/Reporte/CReporte.php?op=listar_Proyectos", function (ts) {
+        $("#SeleccionProyecto").append(ts);
+    });
 }
 
-function accion(idProyecto){
+function accion(idProyecto) {
 
- actualizar_indicadores(idProyecto);
+    actualizar_indicadores(idProyecto);
 
 
 }
 
-function Mostrar_Indicadores1(){
-		 datos = {
-						               type: "pie",
-										data : {
-											datasets :[{
-												data :[
+function Mostrar_Indicadores1() {
+    datos = {
+        type: "pie",
+        data: {
+            datasets: [{
+                data: [
 														1,
 														1,
-
 													],
-												backgroundColor: [
+                backgroundColor: [
 
 													"#F93E3A",
 													"#6BE030",
-
-
 												],
 											}],
-
-											labels : [
+            labels: [
 
 												"Precio de lo pendiente por Avanzar",
 												"Precio total del Avance Real",
-
-
 											]
-										   },
-										options : {
-											responsive : true,
-
-										}
-
-									};
-
-			                 var canvas = document.getElementById('chart1').getContext('2d');
-					         window.pie = new Chart(canvas, datos);
+        },
+        options: {
+            responsive: true,
+        }
+    };
+    var canvas = document.getElementById('chart1').getContext('2d');
+    window.pie = new Chart(canvas, datos);
 }
-function Mostrar_Indicadores2(){
-		 datos2 = {
-						               type: "pie",
-										data : {
-											datasets :[{
-												data :[
-														1,
-														1,
 
+function Mostrar_Indicadores2() {
+    datos2 = {
+        type: "pie",
+        data: {
+            datasets: [{
+                data: [
+														1,
+														1,
 													],
-												backgroundColor: [
-
+                backgroundColor: [
 													"#F93E3A",
 													"#6BE030",
 
-
 												],
 											}],
-
-											labels : [
-
+            labels: [
 												"Porcentaje de lo Pendiente",
 												"Porcentaje de lo Avanzado",
 
-
 											]
-										   },
-										options : {
-											responsive : true,
+        },
+        options: {
+            responsive: true,
 
-										}
+        }
+    };
 
-									};
-
-			                 var canvas2 = document.getElementById('chart2').getContext('2d');
-					         window.pie2 = new Chart(canvas2, datos2);
+    var canvas2 = document.getElementById('chart2').getContext('2d');
+    window.pie2 = new Chart(canvas2, datos2);
 }
-function actualizar_indicadores(idProyecto){
 
-$.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores",{'idProyecto':idProyecto}, function(data, status){
-      data = JSON.parse(data);
-		console.log(data);
+function actualizar_indicadores(idProyecto) {
 
-    var horasProgramadas = parseInt(data.HorasProgramadas);
-    var horasRealizadas = parseInt(data.HorasRealizadas);
-    var costoPresupuesto = parseInt(data.CostoPresupuestado);
-    var costoRealizado = parseInt(data.CostoRealizado);
-    var costoNoRealizado = parseInt(data.CostoNoRealizado);
-    var porcAvance = parseInt(data.PorcentajeAvance);
-    var porcNoAvance = parseInt(data.PorcentajeNoAvance);
+    $.post("../../controlador/Reporte/CReporte.php?op=RecuperarIndicadores", {
+        'idProyecto': idProyecto
+    }, function (data, status) {
+        data = JSON.parse(data);
+        console.log(data);
 
-    var costoDia=parseFloat(costoPresupuesto/horasProgramadas);
-    var costoRealizado=parseFloat(costoDia*horasRealizadas);
-     var costoPendiente=parseFloat(costoDia*(horasProgramadas-horasRealizadas));
-    var DiaPend=horasProgramadas-horasRealizadas;
+        var horasProgramadas = parseInt(data.HorasProgramadas);
+        var horasRealizadas = parseInt(data.HorasRealizadas);
+        var costoPresupuesto = parseInt(data.CostoPresupuestado);
+        var costoRealizado = parseInt(data.CostoRealizado);
+        var costoNoRealizado = parseInt(data.CostoNoRealizado);
+        var porcAvance = parseInt(data.PorcentajeAvance);
+        var porcNoAvance = parseInt(data.PorcentajeNoAvance);
 
-     $("#variable1").append();
-     $("#variable2").append();
-     $("#variable3").append();
-     $("#variable4").append();
-     $("#variable5").append();
-     $("#variable6").append();
-     $("#variable7").append();
+        var costoDia = parseFloat(costoPresupuesto / horasProgramadas);
+        var costoRealizado = parseFloat(costoDia * horasRealizadas);
+        var costoPendiente = parseFloat(costoDia * (horasProgramadas - horasRealizadas));
+        var DiaPend = horasProgramadas - horasRealizadas;
 
-     $("#variable1").html("<b>"+DiaPend+" Dias</b>");
-     $("#variable2").html("<b>"+horasRealizadas+" Dias</b>");
-     $("#variable3").html("<b>S/. "+Formato_Moneda(costoPresupuesto,2)+"</b>");
-     $("#variable4").html("<b>S/. "+Formato_Moneda(costoRealizado,2)+"</b>");
-     $("#variable5").html("<b>S/. "+Formato_Moneda(costoPendiente,2)+"</b>");
-     $("#variable6").html("<b>"+porcAvance+" %</b>");
-     $("#variable7").html("<b>"+porcNoAvance+" %</b>");
+        $("#variable1").append();
+        $("#variable2").append();
+        $("#variable3").append();
+        $("#variable4").append();
+        $("#variable5").append();
+        $("#variable6").append();
+        $("#variable7").append();
 
-		datos.data.datasets.splice(0);
+        $("#variable1").html("<b>" + DiaPend + " Dias</b>");
+        $("#variable2").html("<b>" + horasRealizadas + " Dias</b>");
+        $("#variable3").html("<b>S/. " + Formato_Moneda(costoPresupuesto, 2) + "</b>");
+        $("#variable4").html("<b>S/. " + Formato_Moneda(costoRealizado, 2) + "</b>");
+        $("#variable5").html("<b>S/. " + Formato_Moneda(costoPendiente, 2) + "</b>");
+        $("#variable6").html("<b>" + porcAvance + " %</b>");
+        $("#variable7").html("<b>" + porcNoAvance + " %</b>");
+
+        datos.data.datasets.splice(0);
 
 
-		var newData = {
-									backgroundColor : [
+        var newData = {
+            backgroundColor: [
 										"#F93E3A",
 										"#6BE030",
 
 									],
-									data : [parseFloat(costoPendiente),parseFloat(costoRealizado)]
-								};
-		datos.data.datasets.push(newData);
-		window.pie.update();
+            data: [parseFloat(costoPendiente), parseFloat(costoRealizado)]
+        };
+        datos.data.datasets.push(newData);
+        window.pie.update();
 
 
         datos2.data.datasets.splice(0);
 
-		var newData = {
-									backgroundColor : [
+        var newData = {
+            backgroundColor: [
 										"#F93E3A",
 										"#6BE030",
 
 									],
-									data : [parseFloat(porcNoAvance),parseFloat(porcAvance)]
-								};
-		datos2.data.datasets.push(newData);
-		window.pie2.update();
+            data: [parseFloat(porcNoAvance), parseFloat(porcAvance)]
+        };
+        datos2.data.datasets.push(newData);
+        window.pie2.update();
     });
 }
+
 init();
