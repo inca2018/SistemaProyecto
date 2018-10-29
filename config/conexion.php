@@ -57,20 +57,16 @@ class Conexion {
 		}
 		 return $valor;
 	}
-   public function upload_documento($cliente_IdeCli,$OrdenInterno) {
+   public function upload_documento($idTarea,$nombre) {
       // ubicar el de recurso
-      $linkDocumento='../../views/PreFactura/documento/';
+      $linkDocumento='../../vista/DocumentoTarea/';
       if(!file_exists($linkDocumento)){
          mkdir("$linkDocumento",0777);
-      }
-      $linkRecurso='../../views/PreFactura/documento/'.$cliente_IdeCli."/";
-      if(!file_exists($linkRecurso)){
-         mkdir("$linkRecurso",0777);
       }
       // subida de documento
       if(isset($_FILES["adjuntar_documento"])){
          $extension = explode('.', $_FILES['adjuntar_documento']['name']);
-         $destination ='../../views/PreFactura/documento/'.$cliente_IdeCli.'/'.$OrdenInterno.'.pdf';
+         $destination ='../../vista/DocumentoTarea/'.$nombre;
          $subida = move_uploaded_file($_FILES['adjuntar_documento']['tmp_name'], $destination);
          return $subida;
       }

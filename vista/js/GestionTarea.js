@@ -34,6 +34,56 @@ function init(){
                 var year = parseInt(f_fin.substr(6, 8));
                 $('#date_inicio').datepicker('setEndDate', new Date(year, (month - 1), day));
             });
+
+
+	 $("#formularioTarea").on("submit",function(e)
+	{
+	      RegistrarTarea(e);
+	});
+
+	$("#adjuntar_documento").change(function(){
+   $("#finalizarOpcion").prop("disabled", this.files.length == 0);
+
+});
+}
+function RegistrarTarea(e){
+	  //cargar(true);
+	e.preventDefault(); //No se activará la acción predeterminada del evento
+	swal({
+      title: "Finalizar?",
+      text: "Esta Seguro que desea Finalizar la Tarea!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Si, Finalizar!",
+      closeOnConfirm: false
+   }, function () {
+      AjaxActualizarTarea();
+   });
+}
+
+function AjaxActualizarTarea(){
+    var formData = new FormData($("#formularioTarea")[0]);
+		console.log(formData);
+		$.ajax({
+			url: "../../controlador/Gestion/CGestion.php?op=Finalizar",
+			 type: "POST",
+			 data: formData,
+			 contentType: false,
+			 processData: false,
+			 success: function(data, status)
+			 {
+					data = JSON.parse(data);
+					console.log(data);
+					var Mensaje=data.Mensaje;
+				 	var Error=data.Finalizar;
+					if(!Error){
+						swal("Error:", Mensaje);
+					}else{
+					   swal("Acción:", Mensaje);
+					}
+			 }
+		});
 }
 
 function RegistroGestionTarea(e){
@@ -107,6 +157,9 @@ function MostrarInformacionTarea(idTarea){
     $("#tarea_3").html("<b>"+(data.fechaFin).toUpperCase()+"</b>");
 	 $("#tarea_4").append();
     $("#tarea_4").html("<b>"+(data.diasT).toUpperCase()+"</b>");
+
+	 $("#tarea_5").append();
+    $("#tarea_5").html("<b>"+(data.Descripcion).toUpperCase()+"</b>");
 
 	});
 }
@@ -258,6 +311,10 @@ function Recuperar_Fechas(idTarea){
     });
 	$("#ModalGestionTarea").modal("show");
 	});
+
+}
+function FinalizarTarea(){
+	var idTarea=$("#idTarea").val();
 
 }
 init();

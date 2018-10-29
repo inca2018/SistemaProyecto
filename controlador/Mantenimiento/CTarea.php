@@ -43,15 +43,20 @@
     }
 
     function BuscarAccion($reg){
+		 $resp="";
         if($reg->Estado_idEstado==1 || $reg->Estado_idEstado==2 || $reg->Estado_idEstado==3 || $reg->Estado_idEstado==5 || $reg->Estado_idEstado==6 || $reg->Estado_idEstado==7  ){
-            return '
+            $resp .= '
             <button type="button"  title="Tareas" class="btn btn-info btn-sm" onclick="SubTareas('.$reg->idActividad.')"><i class="fa fa-tasks"></i></button>
             <button type="button" title="Editar" class="btn btn-warning btn-sm" onclick="EditarTarea('.$reg->idActividad.')"><i class="fa fa-edit"></i></button>
                <button type="button"  title="Eliminar" class="btn btn-danger btn-sm" onclick="EliminarTarea('.$reg->idActividad.')"><i class="fa fa-trash"></i></button>
                ';
         }elseif($reg->Estado_idEstado==4){
-            return '<button type="button"  title="Habilitar" class="btn btn-info btn-sm" onclick="HabilitarTarea('.$reg->idActividad.')"><i class="fa fa-sync"></i></button>';
+            $resp .='<button type="button"  title="Habilitar" class="btn btn-info btn-sm" onclick="HabilitarTarea('.$reg->idActividad.')"><i class="fa fa-sync"></i></button>';
         }
+
+
+
+		   return $resp;
     }
 
    switch($_GET['op']){

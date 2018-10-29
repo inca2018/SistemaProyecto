@@ -10,6 +10,9 @@ var cuerpo="";
 var cuerpo2="";
 var cont=0;
 
+var tabladetalle1;
+var tabladetalle2;
+
 function init(){
 Listar_Proyectos();
 	iniciar();
@@ -238,7 +241,7 @@ function detalles2(){
 
 }
 
-function mostrar_Tabla_detalles1(inicio,fin,idp){
+function mostrar_Tabla_detalles1_REP(inicio,fin,idp){
 	  cuerpo="";
 	 $.post("../../controlador/Gestion/CGestion.php?op=RecuperarReporte",{inicio:inicio,fin:fin,idProyecto:idp}, function(data, status){
       data = JSON.parse(data);
@@ -256,15 +259,12 @@ function mostrar_Tabla_detalles1(inicio,fin,idp){
         var corre=(parseInt(i)+1);
          cuerpo=cuerpo+"<tr><th>"+corre+"</th><th class='text-center'>"+actividad+"</th><th class='text-center'>"+fecha+"</th><th class='text-center'>"+verificar(parseFloat(presupuesto))+"</th><th class='text-center'>"+verificar(parseFloat(avance/100))+"</th><th class='text-center'>"+verificar(parseFloat(presupuesto)*parseFloat(avance/100))+"</th></tr>";
         }
-
         $("#body_detalles2").empty();
         $("#body_detalles2").append(cuerpo);
-
-
    });
 }
 
-function mostrar_Tabla_detalles2(inicio,fin,ipd){
+function mostrar_Tabla_detalles2_REP(inicio,fin,ipd){
 	     cuerpo2="";
 	 $.post("../../controlador/Gestion/CGestion.php?op=RecuperarReporte",{inicio:inicio,fin:fin,idProyecto:ipd}, function(data, status){
       data = JSON.parse(data);
@@ -288,9 +288,151 @@ function mostrar_Tabla_detalles2(inicio,fin,ipd){
         $("#body_detalles1").empty();
         $("#body_detalles1").append(cuerpo2);
 
-
-
    });
+}
+function mostrar_Tabla_detalles2(inicio,fin,ipd){
+	tabladetalle1 = $('#tablaDetalles1').dataTable({
+		"aProcessing": true,
+		"aServerSide": true,
+		"processing": true,
+		"paging": false, // Paginacion en tabla
+		"ordering": true, // Ordenamiento en columna de tabla
+		"info": true, // Informacion de cabecera tabla
+		"responsive": true, // Accion de responsive
+          dom: 'lBfrtip',
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+          "order": [[0, "asc"]],
+
+		"bDestroy": true
+        , "columnDefs": [
+            {
+               "className": "text-center"
+               , "targets": [1]
+            }
+            , {
+               "className": "text-left"
+               , "targets": [3]
+            }
+         , ]
+         , buttons: [
+            {
+               extend: 'copy'
+               , className: 'btn-info'
+            }
+            , {
+               extend: 'csv'
+               , className: 'btn-info'
+            }
+            , {
+               extend: 'excel'
+               , className: 'btn-info'
+               , title: 'Reporte'
+            }
+            , {
+				extend: 'pdfHtml5',
+				className: 'btn-info sombra3',
+				title: "Reporte",
+				orientation: 'landscape',
+				pageSize: 'LEGAL'
+            }
+            , {
+               extend: 'print'
+               , className: 'btn-info'
+            }
+            ],
+         "ajax": { //Solicitud Ajax Servidor
+			url: '../../controlador/Gestion/CGestion.php?op=RecuperarReporte1',
+			type: "POST",
+			dataType: "JSON",
+			data:{inicio:inicio,fin:fin,idProyecto:ipd},
+			error: function (e) {
+				console.log(e.responseText);
+			}
+		},
+		// cambiar el lenguaje de datatable
+		oLanguage: español,
+	}).DataTable();
+	//Aplicar ordenamiento y autonumeracion , index
+	tabladetalle1.on('order.dt search.dt', function () {
+		tabladetalle1.column(0, {
+			search: 'applied',
+			order: 'applied'
+		}).nodes().each(function (cell, i) {
+			cell.innerHTML = i + 1;
+		});
+	}).draw();
+}
+function mostrar_Tabla_detalles1(inicio,fin,ipd){
+	tabladetalle2 = $('#tablaDetalles2').dataTable({
+		"aProcessing": true,
+		"aServerSide": true,
+		"processing": true,
+		"paging": false, // Paginacion en tabla
+		"ordering": true, // Ordenamiento en columna de tabla
+		"info": true, // Informacion de cabecera tabla
+		"responsive": true, // Accion de responsive
+          dom: 'lBfrtip',
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+          "order": [[0, "asc"]],
+
+		"bDestroy": true
+        , "columnDefs": [
+            {
+               "className": "text-center"
+               , "targets": [1]
+            }
+            , {
+               "className": "text-left"
+               , "targets": [3]
+            }
+         , ]
+         , buttons: [
+            {
+               extend: 'copy'
+               , className: 'btn-info'
+            }
+            , {
+               extend: 'csv'
+               , className: 'btn-info'
+            }
+            , {
+               extend: 'excel'
+               , className: 'btn-info'
+               , title: 'Reporte'
+            }
+            , {
+				extend: 'pdfHtml5',
+				className: 'btn-info sombra3',
+				title: "Reporte",
+				orientation: 'landscape',
+				pageSize: 'LEGAL'
+            }
+            , {
+               extend: 'print'
+               , className: 'btn-info'
+            }
+            ],
+         "ajax": { //Solicitud Ajax Servidor
+			url: '../../controlador/Gestion/CGestion.php?op=RecuperarReporte2',
+			type: "POST",
+			dataType: "JSON",
+			data:{inicio:inicio,fin:fin,idProyecto:ipd},
+			error: function (e) {
+				console.log(e.responseText);
+			}
+		},
+		// cambiar el lenguaje de datatable
+		oLanguage: español,
+	}).DataTable();
+	//Aplicar ordenamiento y autonumeracion , index
+	tabladetalle2.on('order.dt search.dt', function () {
+		tabladetalle2.column(0, {
+			search: 'applied',
+			order: 'applied'
+		}).nodes().each(function (cell, i) {
+			cell.innerHTML = i + 1;
+		});
+	}).draw();
 }
 
 

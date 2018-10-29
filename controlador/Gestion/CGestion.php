@@ -2,8 +2,10 @@
    session_start();
    require_once "../../modelo/Gestion/MGestion.php";
    require_once "../../modelo/General/MGeneral.php";
+	require_once "../../config/conexion.php";
    $gestion = new MGestion();
    $general = new MGeneral();
+	$recursos           = new Conexion();
 
 
 	$idGestion=isset($_POST["idGestion"])?limpiarCadena($_POST["idGestion"]):"";
@@ -16,7 +18,7 @@
     $Permiso2=isset($_POST["m_gestion"])?limpiarCadena($_POST["m_gestion"]):"";
     $Permiso3=isset($_POST["m_reporte"])?limpiarCadena($_POST["m_reporte"]):"";
 
-    $idProyecto=isset($_POST["idProyecto"])?limpiarCadena($_POST["idProyecto"]):"";
+   $idProyecto=isset($_POST["idProyecto"])?limpiarCadena($_POST["idProyecto"]):"";
  	$idActividad=isset($_POST["idActividad"])?limpiarCadena($_POST["idActividad"]):"";
 	$idTarea=isset($_POST["idTarea"])?limpiarCadena($_POST["idTarea"]):"";
 
@@ -253,6 +255,7 @@
         $rspta=$gestion->RecuperarInformacionFechas($idTarea);
         echo json_encode($rspta);
     break;
+
     case 'RecuperarReporteFechas':
 			$rspta=$gestion->RecuperarReporteFechas($inicio,$fin,$idProyecto);
          echo json_encode($rspta);
@@ -299,7 +302,49 @@
 
          echo json_encode($rspta);
        break;
-		case 'RecuperarReporte':
+		case 'RecuperarReporte2':
+
+		   $rspta=$gestion->RecuperarReporte($inicio,$fin,$idProyecto);
+         $data= array();
+         while ($reg=$rspta->fetch_object()){
+         $data[]=array(
+              "0"=>'',
+						"1"=>$reg->campo1,
+						"2"=>$reg->campo2,
+						"3"=>"S/. ".number_format($reg->campo3,2),
+						"4"=>number_format($reg->campo4/100,2),
+						"5"=>number_format(($reg->campo3*($reg->campo4/100)),2)
+            );
+         }
+         $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+            "aaData"=>$data);
+         echo json_encode($results);
+		break;
+			case 'RecuperarReporte1':
+
+		   $rspta=$gestion->RecuperarReporte($inicio,$fin,$idProyecto);
+         $data= array();
+         while ($reg=$rspta->fetch_object()){
+         $data[]=array(
+              "0"=>'',
+						"1"=>$reg->campo1,
+						"2"=>$reg->campo2,
+						"3"=>number_format(($reg->campo3*($reg->campo4/100)),2),
+						"4"=>"S/. ".number_format($reg->campo3,2),
+						"5"=>number_format((($reg->campo3*($reg->campo4/100))/$reg->campo3),2)
+            );
+         }
+         $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>count($data), //enviamos el total registros a visualizar
+            "aaData"=>$data);
+         echo json_encode($results);
+		break;
+		case 'RecuperarReporte1':
 		   $response=Array();
 			$respuesta=$gestion->RecuperarReporte($inicio,$fin,$idProyecto);
 
@@ -321,6 +366,33 @@
          $rspta['Eliminar']=$gestion->EliminarGestion($idGestion,$idTarea);
 
          $rspta['Eliminar']?$rspta['Mensaje']="Gestión Eliminado.":$rspta['Mensaje']="Gestión no se pudo eliminar porque tiene Tareas Registradas.";
+         echo json_encode($rspta);
+      break;
+	 case 'Finalizar':
+         $rspta = array("Mensaje"=>"","Finalizar"=>false,"Error"=>false);
+
+			$Documento = "";
+            if ($_FILES["adjuntar_documento"]["name"] != '') {
+                $tipoFile = $_FILES['adjuntar_documento']['type'];
+                if ($tipoFile == "application/pdf") {
+                    $Documento =  "Tarea".$idTarea.".pdf";
+                } else {
+                    $Documento      = null;
+                    $rspta["Error"] = true;
+                    $rspta["MensajeCabecera"] .= " Documento Adjunto no es un Archivo PDF valido.";
+                }
+            } else {
+                $Documento = null;
+            }
+
+			$rspta['Finalizar']=$gestion->FinalizarTarea($idTarea,$Documento);
+
+			 if($Documento!=null)
+					 {
+						$Subida     = $recursos->upload_documento($idTarea,"Tarea".$idTarea.".pdf");
+					 }
+
+         $rspta['Finalizar']?$rspta['Mensaje']="Tarea Finalizada Correctamente.":$rspta['Mensaje']="Tarea no se pudo Finalizar contactese con el soporte del sistema.";
          echo json_encode($rspta);
       break;
 
