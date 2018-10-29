@@ -58,7 +58,10 @@
 		  return ejecutarConsulta($sql);
 	  }
 
-
+    public function EliminarGestion($idGestion,$idTarea){
+         $sql="CALL `SP_GESTION_ELIMINAR`('$idGestion','$idTarea');";
+		  return ejecutarConsulta($sql);
+    }
 
 
    }

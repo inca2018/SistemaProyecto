@@ -205,6 +205,35 @@ function NuevaGestion(){
 
 
 }
+
+function EliminarGestion(idGestion){
+      swal({
+      title: "Eliminar?",
+      text: "Esta Seguro que desea Eliminar Registro de Gestión!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Si, Eliminar!",
+      closeOnConfirm: false
+   }, function () {
+      ajaxEliminarGestion(idGestion);
+   });
+}
+function ajaxEliminarGestion(idGestion){
+    var idTarea=$("#idTarea").val();
+    $.post("../../controlador/Gestion/CGestion.php?op=EliminarGestion", {idGestion:idGestion,idTarea:idTarea}, function (data, e) {
+      data = JSON.parse(data);
+      var Error = data.Error;
+      var Mensaje = data.Mensaje;
+      if (Error) {
+         swal("Error", Mensaje, "error");
+      } else {
+         swal("Eliminado!", Mensaje, "success");
+
+         tablaTareaGestion.ajax.reload();
+      }
+   });
+}
 function Recuperar_Fechas(idTarea){
 	 	//solicitud de recuperar Proveedor
 	$.post("../../controlador/Gestion/CGestion.php?op=RecuperarInformacionFechas",{"idTarea":idTarea}, function(data, status){

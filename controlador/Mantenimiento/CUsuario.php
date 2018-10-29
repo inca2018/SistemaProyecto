@@ -70,7 +70,7 @@
                 if($rspta["Error"]){
                     $rspta["Mensaje"].="Por estas razones no se puede Registrar el Usuario.";
                 }else{
-                    if($UsuarioPassword==''){
+                    if($UsuarioPassword!=''){
                         $hasher= new PasswordHash(8,FALSE);
                         $UsuarioPassword = $hasher->HashPassword($UsuarioPassword);
                     }else{

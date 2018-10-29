@@ -16,7 +16,7 @@
     $Permiso2=isset($_POST["m_gestion"])?limpiarCadena($_POST["m_gestion"]):"";
     $Permiso3=isset($_POST["m_reporte"])?limpiarCadena($_POST["m_reporte"]):"";
 
-   $idProyecto=isset($_POST["idProyecto"])?limpiarCadena($_POST["idProyecto"]):"";
+    $idProyecto=isset($_POST["idProyecto"])?limpiarCadena($_POST["idProyecto"]):"";
  	$idActividad=isset($_POST["idActividad"])?limpiarCadena($_POST["idActividad"]):"";
 	$idTarea=isset($_POST["idTarea"])?limpiarCadena($_POST["idTarea"]):"";
 
@@ -315,7 +315,14 @@
 
 		   echo json_encode($response);
 		break;
+    case 'EliminarGestion':
+         $rspta = array("Mensaje"=>"","Eliminar"=>false,"Error"=>false);
+         /*------ Cuando el usuario ya se esta facturando, ya no se puede eliminar --------*/
+         $rspta['Eliminar']=$gestion->EliminarGestion($idGestion,$idTarea);
 
+         $rspta['Eliminar']?$rspta['Mensaje']="Gestión Eliminado.":$rspta['Mensaje']="Gestión no se pudo eliminar porque tiene Tareas Registradas.";
+         echo json_encode($rspta);
+      break;
 
 	}
 

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 23-10-2018 a las 21:42:20
--- Versión del servidor: 5.7.19
--- Versión de PHP: 5.6.31
+-- Tiempo de generación: 24-10-2018 a las 16:25:05
+-- Versión del servidor: 5.7.21
+-- Versión de PHP: 5.6.35
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -224,6 +224,33 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_ESTADO_LISTAR` (IN `Tipo` INT(11
 BEGIN
 
 Select * FROM estado e WHERE e.tipoEstado=Tipo;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `SP_GESTION_ELIMINAR`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GESTION_ELIMINAR` (IN `idGestionU` INT(11), IN `idTareaU` INT(11))  NO SQL
+BEGIN
+ 
+DECLARE total_recuperado INT(11); 
+DECLARE suma_recuperado INT(11); 
+
+
+DELETE FROM `tareagestion` WHERE `idGestionTarea`=idGestionU;
+
+ 
+SET total_recuperado=(SELECT tar.DiasTotales FROM tareagestion tar WHERE tar.Tarea_idTarea=idTareaU LIMIT 1);
+
+SET suma_recuperado=(SELECT SUM(tar.DiasGestion) FROM tareagestion tar INNER JOIN tarea t ON t.idTarea=tar.Tarea_idTarea where t.idTarea=idTareaU GROUP BY t.idTarea);
+
+IF(total_recuperado=suma_recuperado)THEN
+UPDATE `tarea` SET `Estado_idEstado`=7 WHERE `idTarea`=idTareaU;
+ELSE
+    IF(total_recuperado>suma_recuperado) THEN
+    UPDATE `tarea` SET `Estado_idEstado`=6 WHERE `idTarea`=idTareaU;
+    ELSE
+    UPDATE `tarea` SET `Estado_idEstado`=5 WHERE `idTarea`=idTareaU;
+    END IF;
+END IF;
 
 END$$
 
@@ -1198,7 +1225,7 @@ BEGIN
 DECLARE Mensaje VARCHAR(100);
 
 -- ACTUALIZAR USUARIO
-if(pass='-1')then
+if(passE='-1')then
 
 UPDATE `usuario` SET 		`usuario`=usuarioE,`Perfil_idPerfil`=idPerfil,`Estado_idEstado`=idEstado WHERE  `idUsuario`= idUsuarioU;
 set Mensaje="SE ACTUALIZO EL USUARIO:";
@@ -1376,7 +1403,7 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
   `Detalle` text NOT NULL,
   `fechaRegistro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idBitacora`)
-) ENGINE=InnoDB AUTO_INCREMENT=581 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=589 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `bitacora`
@@ -1963,7 +1990,15 @@ INSERT INTO `bitacora` (`idBitacora`, `usuarioAccion`, `Accion`, `tablaAccion`, 
 (577, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'INSERTAR', 'SE REGISTRO TAREA', 'TAREA', '2018-10-21 22:38:55'),
 (578, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'INSERTAR', 'SE REGISTRO TAREA', 'TAREA', '2018-10-21 22:39:14'),
 (579, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'INSERTAR', 'SE REGISTRO TAREA', 'TAREA', '2018-10-21 22:40:13'),
-(580, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'INSERTAR', 'SE REGISTRO TAREA', 'TAREA', '2018-10-21 22:40:36');
+(580, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'INSERTAR', 'SE REGISTRO TAREA', 'TAREA', '2018-10-21 22:40:36'),
+(581, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'ACTUALIZACION', 'USUARIO', 'SE ACTUALIZO EL USUARIO:jmartinezs', '2018-10-23 20:18:10'),
+(582, 'admin', 'ACTUALIZACION', 'Perfil', 'SE ACTUALIZO PERFIL:EMPLEADO2', '2018-10-23 20:19:15'),
+(583, 'admin', 'ACTUALIZACION', 'Perfil', 'SE ACTUALIZO PERFIL:EMPLEADO', '2018-10-23 20:19:30'),
+(584, 'admin', 'ACTUALIZACION', 'Perfil', 'SE ACTUALIZO PERFIL:EMPLEADO', '2018-10-23 20:19:44'),
+(585, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'INSERTAR', 'SE REGISTRO PERFIL', 'Perfil', '2018-10-23 20:20:12'),
+(586, 'ADMINISTRADOR GENERAL DEL SISTEMA', 'INSERTAR', 'SE REGISTRO PERMISOS DE PERFIL', 'Permisos', '2018-10-23 20:20:12'),
+(587, 'admin', 'PERFIL DESHABILITADO', 'PERFIL', 'SEPERFIL DESHABILITADO :VISITANTE', '2018-10-23 20:20:15'),
+(588, 'admin', 'PERFIL HABILITADO', 'PERFIL', 'SEPERFIL HABILITADO :VISITANTE', '2018-10-23 20:20:19');
 
 -- --------------------------------------------------------
 
@@ -2047,7 +2082,7 @@ CREATE TABLE IF NOT EXISTS `login` (
 --
 
 INSERT INTO `login` (`idLogin`, `Usuario_idUsuario`, `usuarioLog`, `passwordLog`, `perfilLog`, `fechaLog`, `ip`, `fechaLogout`) VALUES
-(1, 1, 'admin', '$2a$08$RCuzW/8g2Lg4QMNCfmsa/uKp33rvDmdWrC.P40DOECJlMtPu16NMW', 'Administrador', '2018-09-29 14:03:44', '::1', '2018-10-23 14:57:11');
+(1, 1, 'admin', '$2a$08$RCuzW/8g2Lg4QMNCfmsa/uKp33rvDmdWrC.P40DOECJlMtPu16NMW', 'Administrador', '2018-09-29 14:03:44', '::1', '2018-10-23 20:20:35');
 
 -- --------------------------------------------------------
 
@@ -2204,7 +2239,7 @@ CREATE TABLE IF NOT EXISTS `perfil` (
   `fechaRegistro` datetime NOT NULL,
   PRIMARY KEY (`idPerfil`),
   KEY `FK_Estado` (`Estado_idEstado`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `perfil`
@@ -2213,7 +2248,8 @@ CREATE TABLE IF NOT EXISTS `perfil` (
 INSERT INTO `perfil` (`idPerfil`, `nombrePerfil`, `descripcionPerfil`, `Estado_idEstado`, `fechaRegistro`) VALUES
 (1, 'ADMINISTRADOR', 'ADMINISTRADOR GENERAL, QUE SE ENCARGUE DE TENER ACCESO A TODO EL SISTEMA.', 1, '2018-09-29 13:29:55'),
 (9, 'JEFE DE PROYECTO', 'JEFE DE PROYECTO GENERAL ENCARGADO DE LOS PROYECTOS, PODRÁ ASIGNAR LAS ACTIVIDADES, TAREAS Y PROYECTOS A LOS TRABAJADORES, ENCARGADO TAMBIÉN DE REALIZAR LOS REPORTES DE CADA PROYECTO Y DE LOS INDICADORES DE CADA PROYECTO.', 1, '2018-10-20 13:44:13'),
-(10, 'EMPLEADO', 'EMPLEADO		EMPLEADO SE ENCARGA DE REALIZAR LAS ACTIVIDADES Y TAREAS \r\nQUE LE ASIGNE EL JEFE DE PROYECTOS.', 1, '2018-10-20 13:46:08');
+(10, 'EMPLEADO', 'EMPLEADO		EMPLEADO SE ENCARGA DE REALIZAR LAS ACTIVIDADES Y TAREAS \r\nQUE LE ASIGNE EL JEFE DE PROYECTOS.', 1, '2018-10-20 13:46:08'),
+(11, 'VISITANTE', 'PERFIL OTRO', 1, '2018-10-23 20:20:12');
 
 -- --------------------------------------------------------
 
@@ -2230,7 +2266,7 @@ CREATE TABLE IF NOT EXISTS `permisos` (
   `Permiso3` int(11) NOT NULL,
   PRIMARY KEY (`idPermisos`),
   KEY `FK_Perfil_idPerfil` (`Perfil_idPerfil`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `permisos`
@@ -2239,7 +2275,8 @@ CREATE TABLE IF NOT EXISTS `permisos` (
 INSERT INTO `permisos` (`idPermisos`, `Perfil_idPerfil`, `Permiso1`, `Permiso2`, `Permiso3`) VALUES
 (5, 1, 1, 1, 1),
 (9, 9, 1, 0, 1),
-(10, 10, 1, 0, 0);
+(10, 10, 1, 0, 0),
+(11, 11, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -2460,8 +2497,8 @@ INSERT INTO `tarea` (`idTarea`, `NombreTarea`, `Descripcion`, `fechaRegistro`, `
 (31, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:21', '2018-10-04', '2018-10-11', 22, 7),
 (32, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:41', '2018-10-11', '2018-10-25', 23, 6),
 (33, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:56', '2018-10-25', '2018-10-30', 23, 5),
-(34, 'TAREA 1', 'TAREA 1', '2018-10-21 22:27:51', '2018-10-31', '2018-11-02', 24, 5),
-(35, 'TAREA 1', 'TAREA 1', '2018-10-21 22:28:18', '2018-11-02', '2018-11-28', 25, 5),
+(34, 'TAREA 1', 'TAREA 1', '2018-10-21 22:27:51', '2018-10-31', '2018-11-02', 24, 7),
+(35, 'TAREA 1', 'TAREA 1', '2018-10-21 22:28:18', '2018-11-02', '2018-11-28', 25, 7),
 (36, 'TAREA 1', 'TAREA 1', '2018-10-21 22:30:02', '2018-10-10', '2018-10-31', 26, 7),
 (37, 'TAREA 2', 'TAREA 2', '2018-10-21 22:30:32', '2018-10-31', '2018-10-31', 26, 7),
 (38, 'TAREA 1', 'TAREA 1', '2018-10-21 22:30:52', '2018-10-31', '2018-11-08', 27, 7),
@@ -2496,7 +2533,7 @@ CREATE TABLE IF NOT EXISTS `tareagestion` (
   PRIMARY KEY (`idGestionTarea`),
   KEY `FK_TareaGestion` (`Tarea_idTarea`),
   KEY `FK_PersonTareaGestion` (`Persona_idPersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tareagestion`
@@ -2549,7 +2586,7 @@ INSERT INTO `usuario` (`idUsuario`, `usuario`, `pass`, `Perfil_idPerfil`, `Perso
 (9, 'mrodriguezc', '$2a$08$CHpZjVrfSVyk4TX.k82eKOFM9OAFTOnhtJa55Of2xGX4RMTfmoUce', 9, 42, 1, '2018-10-20 14:12:44'),
 (10, 'ffernandezr', '$2a$08$rLbQSYmZ3I2r.kDEUHW.vO0sB03/02z6zIyq70TmQX0rfMSFuFIRm', 9, 43, 1, '2018-10-20 14:13:08'),
 (11, 'dlopezp', '$2a$08$j9e4wzhJFa.IFRrtv5BdA..v5RzQ8.kMSQRn5jPl/oSCe9WSN5vVy', 9, 44, 1, '2018-10-20 14:13:30'),
-(12, 'jmartinezd', '$2a$08$ub7Ti8tUFuaEioZ5y0cBneWsQ.M7HD/3bMEsvuWKKjCvoLM4zM0DK', 10, 45, 1, '2018-10-20 14:13:52'),
+(12, 'jmartinezs', '$2a$08$ub7Ti8tUFuaEioZ5y0cBneWsQ.M7HD/3bMEsvuWKKjCvoLM4zM0DK', 10, 45, 1, '2018-10-20 14:13:52'),
 (13, 'jsanchezs', '$2a$08$olLiCLQLA7km0mJgijVmuO8hIMedLG.fsdGafjh63SzNQjwTP0krK', 10, 46, 1, '2018-10-20 14:14:16'),
 (14, 'jperezv', '$2a$08$/57L1Tx6a01zNSXMVAiu1OHzC2PwC1bVn9ZXd3TonJgxniYNsCJ9a', 10, 47, 1, '2018-10-20 14:14:48'),
 (15, 'jgomezm', '$2a$08$a6jI1vU7bs8ERw5fwePIkeoctJsbMeGM1OFM6hw7ltU9KgWbwmsOK', 10, 48, 1, '2018-10-20 14:15:11'),
