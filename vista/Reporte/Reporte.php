@@ -164,7 +164,7 @@
          <div class="modal-body">
          <form id="formularioCliente" class="form-horizontal" method="POST">
 
-              <table class="table my-4 w-100 table-hover table-sm dt-responsive nowrap" id="datatable_clientes">
+              <table class="table my-4 w-100 table-hover table-sm dt-responsive nowrap" id="tablaDetalles1">
                      <thead class="thead-light">
                        <tr>
                          <th data-priority="1">#</th>
@@ -203,7 +203,7 @@
          <div class="modal-body">
          <form id="formularioCliente" class="form-horizontal" method="POST">
 
-              <table class="table my-4 w-100 table-hover table-sm dt-responsive nowrap" id="datatable_clientes">
+              <table class="table my-4 w-100 table-hover table-sm dt-responsive nowrap" id="tablaDetalles2">
                      <thead class="thead-light">
                        <tr>
                          <th data-priority="1">#</th>

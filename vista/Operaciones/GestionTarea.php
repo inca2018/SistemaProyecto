@@ -20,10 +20,12 @@
               <div>Mantenimiento Grados</div>
             </div> -->
 		<!-- START card-->
-		<input type="hidden" id="PerfilCodigo" value="<?php echo $_SESSION['perfil'];?>">
-		<input type="hidden" id="idProyecto" value="<?php echo $_POST['idProyecto'];?>">
-		<input type="hidden" id="idActividad" value="<?php echo $_POST['idActividad'];?>">
-		<input type="hidden" id="idTarea" value="<?php echo $_POST['idTarea'];?>">
+		<form method="post" id="formularioTarea">
+
+		<input type="hidden" id="PerfilCodigo" name="PerfilCodigo" value="<?php echo $_SESSION['perfil'];?>">
+		<input type="hidden" id="idProyecto" name="idProyecto" value="<?php echo $_POST['idProyecto'];?>">
+		<input type="hidden" id="idActividad" name="idActividad" value="<?php echo $_POST['idActividad'];?>">
+		<input type="hidden" id="idTarea" name="idTarea" value="<?php echo $_POST['idTarea'];?>">
 
 
 		<div class="card sombra2 ">
@@ -60,16 +62,34 @@
                             <h5 class="text-center" id="tarea_4"><b> </b></h5>
                         </div>
                     </div>
+                    <div class="col-12 col-md-6 br  bb bl  ">
+                        <div class="form-group">
+                            <label class="text-center w-100  text-muted"><em>Descripción de la Tarea:</em></label>
+                            <h5 class="text-center " id="tarea_5"><b> </b></h5>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3 br  bb bl">
+							<div class="form-group">
+								<label>Ajuntar Documento:</label>
+								<input class="form-control filestyle" type="file" name="adjuntar_documento" id="adjuntar_documento" data-classbutton="btn btn-secondary sombra3" data-classinput="form-control inline" data-icon="&lt;span class='fa fa-upload mr-2 '&gt;&lt;/span&gt;" accept="application/pdf" required>
+							</div>
+						</div>
+                  <div class="col-12 col-md-3 br  bb bl">
+							<div class="form-group">
+								<label>Finalizar Tarea:</label>
+								<button type="submit" class="btn btn-primary btn-block "  id="finalizarOpcion" disabled>FINALIZAR</button>
+							</div>
+						</div>
 
                 </div>
 				<hr class="mt-2 mb-2">
 
                 <div class="row">
                     <div class="col-md-2">
-                        <button class="btn btn-info btn-block btn-sm" onclick="volver();"><i class="fas fa-chevron-circle-left fa-lg mr-2"></i> Operaciones</button>
+                        <button type="button" class="btn btn-info btn-block btn-sm" onclick="volver();"><i class="fas fa-chevron-circle-left fa-lg mr-2"></i> Operaciones</button>
                     </div>
                     <div class="col-md-2 offset-8">
-                        <button class="btn btn-success btn-block btn-sm" onclick="NuevaGestion();"><i class="fa fa-plus fa-lg mr-2"></i> Nueva Registro de Dias</button>
+                        <button  type="button" class="btn btn-success btn-block btn-sm" onclick="NuevaGestion();"><i class="fa fa-plus fa-lg mr-2"></i> Nueva Registro de Dias</button>
                     </div>
                 </div>
             <hr class="mt-2 mb-2">
@@ -101,6 +121,7 @@
 
 			</div>
 		</div>
+		</form>
 	</div>
 </section>
 <!-- Fin Modal Agregar-->

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 29-10-2018 a las 16:37:13
--- Versión del servidor: 5.7.21
--- Versión de PHP: 5.6.35
+-- Tiempo de generación: 29-10-2018 a las 19:41:19
+-- Versión del servidor: 5.7.19
+-- Versión de PHP: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -1148,7 +1148,7 @@ DROP PROCEDURE IF EXISTS `SP_SUBTAREA_LISTAR`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SUBTAREA_LISTAR` (IN `idActividadU` INT(11))  NO SQL
 BEGIN
 
-SELECT t.idTarea,t.NombreTarea,t.Descripcion,t.fechaRegistro,DATE_FORMAT(t.fechaInicio,"%d/%m/%Y") as fechaInicio,DATE_FORMAT(t.fechaFin,"%d/%m/%Y") as fechaFin,ac.NombreTarea as NombreActividad,t.Estado_idEstado,e.nombreEstado FROM tarea t INNER JOIN actividad ac ON ac.idActividad=t.Actividad_idActividad INNER JOIN estado e ON e.idEstado=t.Estado_idEstado WHERE ac.idActividad=idActividadU;
+SELECT t.idTarea,t.NombreTarea,t.Descripcion,t.fechaRegistro,DATE_FORMAT(t.fechaInicio,"%d/%m/%Y") as fechaInicio,DATE_FORMAT(t.fechaFin,"%d/%m/%Y") as fechaFin,ac.NombreTarea as NombreActividad,t.Documento, t.Estado_idEstado,e.nombreEstado FROM tarea t INNER JOIN actividad ac ON ac.idActividad=t.Actividad_idActividad INNER JOIN estado e ON e.idEstado=t.Estado_idEstado WHERE ac.idActividad=idActividadU;
 
 END$$
 
@@ -1403,7 +1403,7 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
   `Detalle` text NOT NULL,
   `fechaRegistro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idBitacora`)
-) ENGINE=InnoDB AUTO_INCREMENT=594 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=596 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `bitacora`
@@ -2003,7 +2003,9 @@ INSERT INTO `bitacora` (`idBitacora`, `usuarioAccion`, `Accion`, `tablaAccion`, 
 (590, 'admin', 'ACTUALIZACION', 'SUBTAREA', 'SE ACTUALIZO SUBTAREA:Tarea 4', '2018-10-24 13:33:22'),
 (591, 'admin', 'ACTUALIZACION', 'SUBTAREA', 'SE ACTUALIZO SUBTAREA:Tarea 4', '2018-10-24 13:33:39'),
 (592, 'admin', 'ACTUALIZACION', 'SUBTAREA', 'SE ACTUALIZO SUBTAREA:Tarea 42', '2018-10-24 13:51:52'),
-(593, 'admin', 'ACTUALIZACION', 'SUBTAREA', 'SE ACTUALIZO SUBTAREA:Tarea 4', '2018-10-24 13:52:02');
+(593, 'admin', 'ACTUALIZACION', 'SUBTAREA', 'SE ACTUALIZO SUBTAREA:Tarea 4', '2018-10-24 13:52:02'),
+(594, 'admin', 'ACTUALIZACION', 'SUBTAREA', 'SE ACTUALIZO SUBTAREA:TAREA 122', '2018-10-29 11:43:40'),
+(595, 'admin', 'ACTUALIZACION', 'SUBTAREA', 'SE ACTUALIZO SUBTAREA:TAREA 1', '2018-10-29 11:43:47');
 
 -- --------------------------------------------------------
 
@@ -2046,7 +2048,7 @@ CREATE TABLE IF NOT EXISTS `estado` (
   `tipoEstado` tinyint(4) NOT NULL,
   `nombreEstado` varchar(50) NOT NULL,
   PRIMARY KEY (`idEstado`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `estado`
@@ -2057,10 +2059,11 @@ INSERT INTO `estado` (`idEstado`, `tipoEstado`, `nombreEstado`) VALUES
 (2, 1, 'INACTIVO'),
 (3, 2, 'HABILITADO'),
 (4, 2, 'DESHABILITADO'),
-(5, 3, 'INICIADO'),
-(6, 3, 'PENDIENTE'),
+(5, 3, 'ACEPTADO'),
+(6, 3, 'EN PROCESO'),
 (7, 3, 'FINALIZADO'),
-(8, 3, 'ANULADO');
+(8, 3, 'ANULADO'),
+(9, 3, 'EN PROCESO');
 
 -- --------------------------------------------------------
 
@@ -2087,7 +2090,7 @@ CREATE TABLE IF NOT EXISTS `login` (
 --
 
 INSERT INTO `login` (`idLogin`, `Usuario_idUsuario`, `usuarioLog`, `passwordLog`, `perfilLog`, `fechaLog`, `ip`, `fechaLogout`) VALUES
-(1, 1, 'admin', '$2a$08$RCuzW/8g2Lg4QMNCfmsa/uKp33rvDmdWrC.P40DOECJlMtPu16NMW', 'Administrador', '2018-09-29 14:03:44', '::1', '2018-10-24 13:52:33');
+(1, 1, 'admin', '$2a$08$RCuzW/8g2Lg4QMNCfmsa/uKp33rvDmdWrC.P40DOECJlMtPu16NMW', 'Administrador', '2018-09-29 14:03:44', '::1', '2018-10-29 12:03:56');
 
 -- --------------------------------------------------------
 
@@ -2461,6 +2464,7 @@ CREATE TABLE IF NOT EXISTS `tarea` (
   `fechaRegistro` datetime NOT NULL,
   `fechaInicio` date DEFAULT NULL,
   `fechaFin` date DEFAULT NULL,
+  `Documento` varchar(150) DEFAULT NULL,
   `Actividad_idActividad` int(11) NOT NULL,
   `Estado_idEstado` int(11) NOT NULL,
   PRIMARY KEY (`idTarea`),
@@ -2472,51 +2476,51 @@ CREATE TABLE IF NOT EXISTS `tarea` (
 -- Volcado de datos para la tabla `tarea`
 --
 
-INSERT INTO `tarea` (`idTarea`, `NombreTarea`, `Descripcion`, `fechaRegistro`, `fechaInicio`, `fechaFin`, `Actividad_idActividad`, `Estado_idEstado`) VALUES
-(5, 'tarea1', 'tarea1', '2018-10-21 20:49:36', '2018-10-01', '2018-10-10', 11, 5),
-(6, 'tarea 2', 'tarea 2', '2018-10-21 20:49:59', '2018-10-10', '2018-10-20', 11, 5),
-(7, 'Tarea 3', 'Tarea 3', '2018-10-21 20:51:26', '2018-10-20', '2018-10-31', 11, 5),
-(8, 'Tarea 4', 'Tarea 4', '2018-10-21 20:52:30', '2018-10-31', '2018-11-10', 11, 5),
-(9, 'tarea 1', 'tarea 1', '2018-10-21 21:06:53', '2018-11-10', '2018-11-17', 12, 5),
-(10, 'tarea 2', 'tarea 2', '2018-10-21 21:07:09', '2018-11-17', '2018-11-22', 12, 5),
-(11, 'Tarea 3', 'Tarea 3', '2018-10-21 21:27:13', '2018-11-22', '2018-11-29', 12, 5),
-(12, 'Tarea 1', 'Tarea 1', '2018-10-21 21:40:15', '2018-11-29', '2018-12-06', 13, 5),
-(13, 'Tarea 2', 'Tarea 2', '2018-10-21 21:40:38', '2018-12-06', '2018-12-13', 13, 5),
-(14, 'Tarea 3', 'Tarea 3', '2018-10-21 21:40:53', '2018-12-13', '2018-12-20', 13, 5),
-(15, 'Tarea 1', 'Tarea 1', '2018-10-21 21:41:49', '2018-12-20', '2018-12-25', 14, 5),
-(16, 'Tarea 2', 'Tarea 2', '2018-10-21 21:46:58', '2018-12-25', '2018-12-31', 14, 5),
-(17, 'Tarea 1', 'Tarea 1', '2018-10-21 21:47:34', '2018-12-31', '2019-01-11', 15, 5),
-(18, 'Tarea 2', 'Tarea 2', '2018-10-21 21:48:00', '2019-01-11', '2019-01-19', 15, 5),
-(19, 'Tarea 1', 'Tarea 1', '2018-10-21 22:17:12', '2018-10-01', '2018-10-12', 16, 5),
-(20, 'Tarea 2', 'Tarea 2', '2018-10-21 22:17:27', '2018-10-12', '2018-10-26', 16, 5),
-(21, 'Tarea 3', 'Tarea 3', '2018-10-21 22:18:25', '2018-10-26', '2018-10-31', 16, 5),
-(22, 'Tarea 1', 'Tarea 1', '2018-10-21 22:19:01', '2018-10-31', '2018-11-08', 17, 5),
-(23, 'Tarea 2', 'Tarea 2', '2018-10-21 22:19:47', '2018-11-08', '2018-11-16', 17, 5),
-(24, 'Tarea 1', 'Tarea 1', '2018-10-21 22:20:18', '2018-11-16', '2018-11-21', 18, 5),
-(25, 'Tarea 2', 'Tarea 2', '2018-10-21 22:20:32', '2018-11-21', '2018-11-23', 18, 5),
-(26, 'Tarea 1', 'Tarea 1', '2018-10-21 22:22:32', '2018-11-23', '2018-11-29', 19, 5),
-(27, 'Tarea 2', 'Tarea 2', '2018-10-21 22:22:51', '2018-11-29', '2018-11-30', 19, 5),
-(28, 'Tarea 1', 'Tarea 1', '2018-10-21 22:23:22', '2018-11-30', '2018-12-06', 20, 5),
-(29, 'Tarea 2', 'Tarea 2', '2018-10-21 22:23:37', '2018-12-06', '2018-12-14', 20, 5),
-(30, 'TAREA 1', 'TAREA 1', '2018-10-21 22:25:57', '2018-10-01', '2018-10-04', 21, 7),
-(31, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:21', '2018-10-04', '2018-10-11', 22, 7),
-(32, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:41', '2018-10-11', '2018-10-25', 23, 6),
-(33, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:56', '2018-10-25', '2018-10-30', 23, 5),
-(34, 'TAREA 1', 'TAREA 1', '2018-10-21 22:27:51', '2018-10-31', '2018-11-02', 24, 7),
-(35, 'TAREA 1', 'TAREA 1', '2018-10-21 22:28:18', '2018-11-02', '2018-11-28', 25, 7),
-(36, 'TAREA 1', 'TAREA 1', '2018-10-21 22:30:02', '2018-10-10', '2018-10-31', 26, 7),
-(37, 'TAREA 2', 'TAREA 2', '2018-10-21 22:30:32', '2018-10-31', '2018-10-31', 26, 7),
-(38, 'TAREA 1', 'TAREA 1', '2018-10-21 22:30:52', '2018-10-31', '2018-11-08', 27, 7),
-(39, 'TAREA 2', 'TAREA 2', '2018-10-21 22:31:04', '2018-11-08', '2018-11-16', 27, 7),
-(40, 'TAREA 1', 'TAREA 1', '2018-10-21 22:33:36', '2018-11-16', '2018-11-20', 28, 6),
-(41, 'TAREA 2', 'TAREA 2', '2018-10-21 22:33:49', '2018-11-20', '2018-11-22', 28, 7),
-(42, 'TAREA 1', 'TAREA 1', '2018-10-21 22:34:33', '2018-11-22', '2018-11-30', 29, 7),
-(43, 'TAREA 1', 'TAREA 1', '2018-10-21 22:34:54', '2018-11-30', '2018-12-13', 30, 6),
-(44, 'TAREA 1', 'TAREA 1', '2018-10-21 22:38:37', '2018-10-16', '2018-10-30', 31, 7),
-(45, 'TAREA 1', 'TAREA 1', '2018-10-21 22:38:55', '2018-10-30', '2018-11-06', 32, 5),
-(46, 'TAREA 1', 'TAREA 1', '2018-10-21 22:39:14', '2018-11-06', '2018-11-14', 33, 5),
-(47, 'TAREA 1', 'TAREA 1', '2018-10-21 22:40:13', '2018-11-14', '2018-11-17', 34, 5),
-(48, 'TAREA 1', 'TAREA 1', '2018-10-21 22:40:36', '2018-11-17', '2018-11-22', 35, 5);
+INSERT INTO `tarea` (`idTarea`, `NombreTarea`, `Descripcion`, `fechaRegistro`, `fechaInicio`, `fechaFin`, `Documento`, `Actividad_idActividad`, `Estado_idEstado`) VALUES
+(5, 'tarea1', 'tarea1', '2018-10-21 20:49:36', '2018-10-01', '2018-10-10', NULL, 11, 5),
+(6, 'tarea 2', 'tarea 2', '2018-10-21 20:49:59', '2018-10-10', '2018-10-20', NULL, 11, 5),
+(7, 'Tarea 3', 'Tarea 3', '2018-10-21 20:51:26', '2018-10-20', '2018-10-31', NULL, 11, 5),
+(8, 'Tarea 4', 'Tarea 4', '2018-10-21 20:52:30', '2018-10-31', '2018-11-10', NULL, 11, 5),
+(9, 'tarea 1', 'tarea 1', '2018-10-21 21:06:53', '2018-11-10', '2018-11-17', NULL, 12, 5),
+(10, 'tarea 2', 'tarea 2', '2018-10-21 21:07:09', '2018-11-17', '2018-11-22', NULL, 12, 5),
+(11, 'Tarea 3', 'Tarea 3', '2018-10-21 21:27:13', '2018-11-22', '2018-11-29', NULL, 12, 5),
+(12, 'Tarea 1', 'Tarea 1', '2018-10-21 21:40:15', '2018-11-29', '2018-12-06', NULL, 13, 5),
+(13, 'Tarea 2', 'Tarea 2', '2018-10-21 21:40:38', '2018-12-06', '2018-12-13', NULL, 13, 5),
+(14, 'Tarea 3', 'Tarea 3', '2018-10-21 21:40:53', '2018-12-13', '2018-12-20', NULL, 13, 5),
+(15, 'Tarea 1', 'Tarea 1', '2018-10-21 21:41:49', '2018-12-20', '2018-12-25', NULL, 14, 5),
+(16, 'Tarea 2', 'Tarea 2', '2018-10-21 21:46:58', '2018-12-25', '2018-12-31', NULL, 14, 5),
+(17, 'Tarea 1', 'Tarea 1', '2018-10-21 21:47:34', '2018-12-31', '2019-01-11', NULL, 15, 5),
+(18, 'Tarea 2', 'Tarea 2', '2018-10-21 21:48:00', '2019-01-11', '2019-01-19', NULL, 15, 5),
+(19, 'Tarea 1', 'Tarea 1', '2018-10-21 22:17:12', '2018-10-01', '2018-10-12', NULL, 16, 5),
+(20, 'Tarea 2', 'Tarea 2', '2018-10-21 22:17:27', '2018-10-12', '2018-10-26', NULL, 16, 5),
+(21, 'Tarea 3', 'Tarea 3', '2018-10-21 22:18:25', '2018-10-26', '2018-10-31', NULL, 16, 5),
+(22, 'Tarea 1', 'Tarea 1', '2018-10-21 22:19:01', '2018-10-31', '2018-11-08', NULL, 17, 5),
+(23, 'Tarea 2', 'Tarea 2', '2018-10-21 22:19:47', '2018-11-08', '2018-11-16', NULL, 17, 5),
+(24, 'Tarea 1', 'Tarea 1', '2018-10-21 22:20:18', '2018-11-16', '2018-11-21', NULL, 18, 5),
+(25, 'Tarea 2', 'Tarea 2', '2018-10-21 22:20:32', '2018-11-21', '2018-11-23', NULL, 18, 5),
+(26, 'Tarea 1', 'Tarea 1', '2018-10-21 22:22:32', '2018-11-23', '2018-11-29', NULL, 19, 5),
+(27, 'Tarea 2', 'Tarea 2', '2018-10-21 22:22:51', '2018-11-29', '2018-11-30', NULL, 19, 5),
+(28, 'Tarea 1', 'Tarea 1', '2018-10-21 22:23:22', '2018-11-30', '2018-12-06', NULL, 20, 5),
+(29, 'Tarea 2', 'Tarea 2', '2018-10-21 22:23:37', '2018-12-06', '2018-12-14', NULL, 20, 5),
+(30, 'TAREA 1', 'TAREA 1', '2018-10-21 22:25:57', '2018-10-01', '2018-10-04', NULL, 21, 7),
+(31, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:21', '2018-10-04', '2018-10-11', NULL, 22, 7),
+(32, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:41', '2018-10-11', '2018-10-25', NULL, 23, 6),
+(33, 'TAREA 1', 'TAREA 1', '2018-10-21 22:26:56', '2018-10-25', '2018-10-30', NULL, 23, 5),
+(34, 'TAREA 1', 'TAREA 1', '2018-10-21 22:27:51', '2018-10-31', '2018-11-02', NULL, 24, 7),
+(35, 'TAREA 1', 'TAREA 1', '2018-10-21 22:28:18', '2018-11-02', '2018-11-28', NULL, 25, 7),
+(36, 'TAREA 1', 'TAREA 1', '2018-10-21 22:30:02', '2018-10-10', '2018-10-31', NULL, 26, 7),
+(37, 'TAREA 2', 'TAREA 2', '2018-10-21 22:30:32', '2018-10-31', '2018-10-31', NULL, 26, 7),
+(38, 'TAREA 1', 'TAREA 1', '2018-10-21 22:30:52', '2018-10-31', '2018-11-08', NULL, 27, 7),
+(39, 'TAREA 2', 'TAREA 2', '2018-10-21 22:31:04', '2018-11-08', '2018-11-16', NULL, 27, 7),
+(40, 'TAREA 1', 'TAREA 1', '2018-10-21 22:33:36', '2018-11-16', '2018-11-20', 'Tarea40.pdf', 28, 7),
+(41, 'TAREA 2', 'TAREA 2', '2018-10-21 22:33:49', '2018-11-20', '2018-11-22', NULL, 28, 7),
+(42, 'TAREA 1', 'TAREA 1', '2018-10-21 22:34:33', '2018-11-22', '2018-11-30', NULL, 29, 7),
+(43, 'TAREA 1', 'TAREA 1', '2018-10-21 22:34:54', '2018-11-30', '2018-12-13', 'Tarea43.pdf', 30, 7),
+(44, 'TAREA 1', 'TAREA 1', '2018-10-21 22:38:37', '2018-10-16', '2018-10-30', NULL, 31, 7),
+(45, 'TAREA 1', 'TAREA 1', '2018-10-21 22:38:55', '2018-10-30', '2018-11-06', 'Tarea45.pdf', 32, 7),
+(46, 'TAREA 1', 'TAREA 1', '2018-10-21 22:39:14', '2018-11-06', '2018-11-14', NULL, 33, 5),
+(47, 'TAREA 1', 'TAREA 1', '2018-10-21 22:40:13', '2018-11-14', '2018-11-17', NULL, 34, 5),
+(48, 'TAREA 1', 'TAREA 1', '2018-10-21 22:40:36', '2018-11-17', '2018-11-22', NULL, 35, 5);
 
 -- --------------------------------------------------------
 

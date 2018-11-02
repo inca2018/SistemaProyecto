@@ -32,7 +32,7 @@
        }
 
 		public function RecuperarInformacionTarea($idTarea){
-			$sql="SELECT NombreTarea,fechaInicio,fechaFin,fechaRegistro,idTarea,TIMESTAMPDIFF(DAY,fechaInicio,fechaFin) AS diasT FROM tarea WHERE idTarea='$idTarea';";
+			$sql="SELECT NombreTarea,Descripcion,fechaInicio,fechaFin,fechaRegistro,idTarea,TIMESTAMPDIFF(DAY,fechaInicio,fechaFin) AS diasT FROM tarea WHERE idTarea='$idTarea';";
 			return ejecutarConsultaSimpleFila($sql);
 		}
 		public function RecuperarInformacionFechas($idTarea){
@@ -57,6 +57,11 @@
 		  $sql="SELECT ac.idActividad,ac.NombreTarea FROM proyecto pro INNER JOIN actividad ac On ac.Proyecto_idProyecto=pro.idProyecto where pro.idProyecto=$idProyecto";
 		  return ejecutarConsulta($sql);
 	  }
+
+		public function FinalizarTarea($idTarea,$Documento){
+			$sql="UPDATE `tarea` SET  `Documento`='$Documento',`Estado_idEstado`=7 WHERE `idTarea`='$idTarea'";
+			return ejecutarConsulta($sql);
+		}
 
     public function EliminarGestion($idGestion,$idTarea){
          $sql="CALL `SP_GESTION_ELIMINAR`('$idGestion','$idTarea');";
