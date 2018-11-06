@@ -61,6 +61,7 @@
 
 		public function FinalizarTarea($idTarea,$Documento){
 			$sql="UPDATE `tarea` SET  `Documento`='$Documento',`Estado_idEstado`=7 WHERE `idTarea`='$idTarea'";
+
 			return ejecutarConsulta($sql);
 		}
 

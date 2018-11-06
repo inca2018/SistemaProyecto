@@ -98,6 +98,18 @@
 
    }
 
+function AccionDisponibilidad($reg){
+	$respuesta="";
+	$respuesta.= '<button type="button"  title="Gestión" class="btn btn-info btn-sm m-1" onclick="Gestion_Tarea('.$reg->idProyecto.','.$reg->idActividad.','.$reg->idTarea.')"><i class="fas fa-share fa-lg"></i>
+            </button>';
+
+	if ($reg->Documento != "" || $reg->Documento != null) {
+			  $respuesta .= '<a href="../../vista/DocumentoTarea/'. $reg->Documento . '" target="_blank" class="btn btn-danger btn-sm ml-1"><i class="fas fa-file-pdf"></i></a>';
+		 }
+
+	return $respuesta;
+}
+
    switch($_GET['op']){
      case 'RecuperarInformacionMatricula':
 			$rspta=$gestion->RecuperarInformacionMatricula($idPlan,$idAlumno);
@@ -273,8 +285,7 @@
 				   "2"=>BuscarEstado($reg),
                "3"=>$reg->NombreActividad,
                "4"=>$reg->NombreTarea,
-               "5"=>'<button type="button"  title="Gestión" class="btn btn-info btn-sm m-1" onclick="Gestion_Tarea('.$reg->idProyecto.','.$reg->idActividad.','.$reg->idTarea.')"><i class="fas fa-share fa-lg"></i>
-            </button>'
+               "5"=>AccionDisponibilidad($reg)
             );
          }
          $results = array(
