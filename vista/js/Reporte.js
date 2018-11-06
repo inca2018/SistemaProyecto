@@ -28,7 +28,7 @@ function Listar_Proyectos(){
 
 function iniciar(){
 
-		$('#date_inicio1').datepicker({
+    $('#date_inicio1').datepicker({
 			 format: 'dd/mm/yyyy',
 
         });

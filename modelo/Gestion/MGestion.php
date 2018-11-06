@@ -68,6 +68,49 @@
 		  return ejecutarConsulta($sql);
     }
 
+       public function ListarProyectos(){
+           $sql="SELECT
+pro.idProyecto,
+pro.NombreProyecto,
+DATE_FORMAT(pro.fechaInicio,'%d/%m/%Y') as Inicio,
+DATE_FORMAT(pro.fechaFin,'%d/%m/%Y') as Fin,
+CONCAT(FORMAT(IFNULL(((SELECT SUM(tg.DiasGestion) FROM actividad ac3 INNER JOIN tarea ta3 On ta3.Actividad_idActividad=ac3.idActividad INNER JOIN tareagestion tg On tg.Tarea_idTarea=ta3.idTarea where ac3.Proyecto_idProyecto=pro.idProyecto)*100)/(TIMESTAMPDIFF(DAY,pro.fechaInicio,pro.fechaFin)),'0.00'),2),'%') as PorcentajeAvance
+
+FROM proyecto pro LEFT JOIN actividad ac ON ac.Proyecto_idProyecto=pro.idProyecto GROUP BY pro.idProyecto";
+		  return ejecutarConsulta($sql);
+       }
+       public function ListarActividades($idProyecto){
+           $sql="SELECT
+act.idActividad,
+act.NombreTarea,
+DATE_FORMAT(act.fechaInicio,'%d/%m/%Y') as Inicio,
+DATE_FORMAT(act.fechaFin,'%d/%m/%Y') as Fin,
+
+CONCAT(FORMAT(IFNULL((
+    (SELECT SUM(tg.DiasGestion) FROM actividad ac3 INNER JOIN tarea ta3 On ta3.Actividad_idActividad=ac3.idActividad INNER JOIN tareagestion tg On tg.Tarea_idTarea=ta3.idTarea where ac3.idActividad=act.idActividad)
+    *100)
+                     /(TIMESTAMPDIFF(DAY,act.fechaInicio,act.fechaFin)),'0.00'),2),'%') as ActividadAvance
+
+FROM actividad act WHERE act.Proyecto_idProyecto='$idProyecto'";
+		  return ejecutarConsulta($sql);
+       }
+
+       public function ListarTareas($idActividad){
+           $sql="SELECT
+t.idTarea,
+t.NombreTarea,
+DATE_FORMAT(t.fechaInicio,'%d/%m/%Y') as Inicio,
+DATE_FORMAT(t.fechaFin,'%d/%m/%Y') as Fin,
+
+CONCAT(FORMAT(IFNULL((
+    (SELECT SUM(tg.DiasGestion) FROM actividad ac3 INNER JOIN tarea ta3 On ta3.Actividad_idActividad=ac3.idActividad INNER JOIN tareagestion tg On tg.Tarea_idTarea=ta3.idTarea where ta3.idTarea=t.idTarea)
+    *100)
+                     /(TIMESTAMPDIFF(DAY,t.fechaInicio,t.fechaFin)),'0.00'),2),'%') as TareadAvance
+
+FROM tarea t WHERE t.Actividad_idActividad='$idActividad';";
+		  return ejecutarConsulta($sql);
+       }
+
 
    }
 

@@ -181,6 +181,11 @@
                               <span>Reportes</span>
                           </a>
                         </li>
+                        <li id="Cronogramas" class=" ">
+                           <a href="<?php echo  $conexionConfig->rutaOP().'vista/Reporte/Cronograma.php';?>" title="Cronogramas">
+                              <span>Cronogramas</span>
+                          </a>
+                        </li>
 
                      </ul>
                   </li>

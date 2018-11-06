@@ -396,6 +396,46 @@
          echo json_encode($rspta);
       break;
 
+
+
+      case 'JsonArbol':
+         $response= Array();
+         $general=Array();
+         $general["text"]='<span class="badge badge-dark ml-2 mr-2"><i class="fa fa-star mr-2 ml-2" aria-hidden="true"></i>Portafolio de Proyectos</span>';
+
+         $rspta_proyecto=$gestion->ListarProyectos();
+
+          while ($reg_proyecto=$rspta_proyecto->fetch_object()){
+              $Proyecto= Array();
+              $Proyecto["text"]='<span class="badge badge-warning ml-2 mr-2"><i class="fa fa-folder mr-2 ml-2" aria-hidden="true"></i>PROYECTO : '.$reg_proyecto->NombreProyecto.' ---------- Fecha de Inicio: '.$reg_proyecto->Inicio.' ----------  Fecha de Fin: '.$reg_proyecto->Fin.'</span> <span class="badge badge-success ">'.$reg_proyecto->PorcentajeAvance.'</span>';
+
+               $rspta_Actividad=$gestion->ListarActividades($reg_proyecto->idProyecto);
+              while($reg_Acti=$rspta_Actividad->fetch_object()){
+                  $Actividad=Array();
+                  $Actividad["text"]='<span class="badge badge-primary ml-2 mr-2"><i class="fa fa-folder   mr-2 ml-2" aria-hidden="true"></i>ACTIVIDAD: '.$reg_Acti->NombreTarea.'---------- Fecha de Inicio: '.$reg_Acti->Inicio.' ----------  Fecha de Fin: '.$reg_Acti->Fin.' </span><span class="badge badge-success ">'.$reg_Acti->ActividadAvance.'</span>';
+
+                 $rsta_tareas=$gestion->ListarTareas($reg_Acti->idActividad);
+                   while($reg_Tarea=$rsta_tareas->fetch_object()){
+                      $Tarea=Array();
+                      $Tarea["text"]='<span class="badge badge-info ml-2 mr-2"><i class="fa fa-folder  mr-2 ml-2" aria-hidden="true"></i>TAREA: '.$reg_Tarea->NombreTarea.'---------- Fecha de Inicio: '.$reg_Tarea->Inicio.' ----------  Fecha de Fin: '.$reg_Tarea->Fin.'</span><span class="badge badge-success ">'.$reg_Tarea->TareadAvance.'</span>';
+
+                      $Actividad["children"][]=$Tarea;
+                  }
+
+                  $Proyecto["children"][]=$Actividad;
+
+
+              }
+
+              $general["children"][]=$Proyecto;
+
+          }
+
+         $response[]=$general;
+
+        echo json_encode($response);
+    break;
+
 	}
 
 

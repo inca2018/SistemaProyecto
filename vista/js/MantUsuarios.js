@@ -18,6 +18,7 @@ function Iniciar_Componentes() {
         RegistroUsuario(e);
     });
 
+
 }
 
 function Recuperar_totales() {
