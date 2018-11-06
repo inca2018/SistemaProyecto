@@ -62,7 +62,13 @@
                             <h5 class="text-center" id="tarea_4"><b> </b></h5>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 br  bb bl  ">
+                    <div class="col-12 col-md-3 br  bb bl  ">
+                        <div class="form-group">
+                            <label class="text-center w-100  text-muted"><em>Avance de Tarea:</em></label>
+                            <h5 class="text-center " id="tarea_avance"><b> </b></h5>
+                        </div>
+                    </div>
+                     <div class="col-12 col-md-3 br  bb bl  ">
                         <div class="form-group">
                             <label class="text-center w-100  text-muted"><em>Descripción de la Tarea:</em></label>
                             <h5 class="text-center " id="tarea_5"><b> </b></h5>

@@ -32,7 +32,8 @@
        }
 
 		public function RecuperarInformacionTarea($idTarea){
-			$sql="SELECT NombreTarea,Descripcion,fechaInicio,fechaFin,fechaRegistro,idTarea,TIMESTAMPDIFF(DAY,fechaInicio,fechaFin) AS diasT FROM tarea WHERE idTarea='$idTarea';";
+
+            $sql="CALL `SP_GESTION_RECUPERAR_INFORMACION_TAREA`('$idTarea');";
 			return ejecutarConsultaSimpleFila($sql);
 		}
 		public function RecuperarInformacionFechas($idTarea){
