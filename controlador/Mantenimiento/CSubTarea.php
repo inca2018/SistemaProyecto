@@ -60,7 +60,7 @@
                <button type="button"  title="Eliminar" class="btn btn-danger btn-sm" onclick="EliminarSubTarea('.$reg->idTarea.')"><i class="fa fa-trash"></i></button>
                ';
         }elseif($reg->Estado_idEstado==4 || $reg->Estado_idEstado==8){
-            $resp.= '<button type="button"  title="Habilitar" class="btn btn-info btn-sm" onclick="HabilitarSubTarea('.$reg->idTarea.')"><i class="fa fa-sync"></i></button>';
+            $resp.= '<button type="button"  title="Reprogramar" class="btn btn-info btn-sm" onclick="HabilitarSubTarea('.$reg->idTarea.')"><i class="fa fa-sync"></i></button>';
         }
 
 		 if ($reg->Documento != "" || $reg->Documento != null) {

@@ -51,7 +51,7 @@
                <button type="button"  title="Eliminar" class="btn btn-danger btn-sm" onclick="EliminarTarea('.$reg->idActividad.')"><i class="fa fa-trash"></i></button>
                ';
         }elseif($reg->Estado_idEstado==4){
-            $resp .='<button type="button"  title="Habilitar" class="btn btn-info btn-sm" onclick="HabilitarTarea('.$reg->idActividad.')"><i class="fa fa-sync"></i></button>';
+            $resp .='<button type="button"  title="Reporgramar" class="btn btn-info btn-sm" onclick="HabilitarTarea('.$reg->idActividad.')"><i class="fa fa-sync"></i></button>';
         }
 
 
