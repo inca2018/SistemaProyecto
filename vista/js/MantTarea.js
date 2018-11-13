@@ -191,7 +191,7 @@ function RecuperarTarea(idTarea){
 		data = JSON.parse(data);
 		console.log(data);
 
-        $("#idTarea").val(data.idTarea);
+        $("#idTarea").val(data.idActividad);
         $("#TareaNombre").val(data.NombreTarea);
         $("#TareaHoras").val(data.CantidadHoras);
         $("#TareaDescripcion").val(data.Descripcion);

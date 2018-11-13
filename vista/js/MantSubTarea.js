@@ -256,7 +256,7 @@ function RecuperarSubTarea(idSubTarea) {
 function EliminarSubTarea(idSubTarea) {
     swal({
         title: "Eliminar?",
-        text: "Esta Seguro que desea Eliminar SubTarea!",
+        text: "Esta Seguro que desea Eliminar Tarea!",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
@@ -285,12 +285,12 @@ function ajaxEliminarSubTarea(idSubTarea) {
 
 function HabilitarSubTarea(idSubTarea) {
     swal({
-        title: "Habilitar?",
-        text: "Esta Seguro que desea Habilitar SubTarea!",
+        title: "Reprogramar?",
+        text: "Esta Seguro que desea Reprogramar Tarea!",
         type: "info",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Si, Habilitar!",
+        confirmButtonText: "Si, Reprogramar!",
         closeOnConfirm: false
     }, function () {
         ajaxHabilitarSubTarea(idSubTarea);
