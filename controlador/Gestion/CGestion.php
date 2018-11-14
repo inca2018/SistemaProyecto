@@ -390,7 +390,7 @@ function AccionDisponibilidad($reg){
                 } else {
                     $Documento      = null;
                     $rspta["Error"] = true;
-                    $rspta["MensajeCabecera"] .= " Documento Adjunto no es un Archivo PDF valido.";
+                    $rspta["Mensaje"] .= " Documento Adjunto no es un Archivo PDF valido.";
                 }
             } else {
                 $Documento = null;
