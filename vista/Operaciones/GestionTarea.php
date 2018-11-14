@@ -80,7 +80,7 @@
 								<input class="form-control filestyle" type="file" name="adjuntar_documento" id="adjuntar_documento" data-classbutton="btn btn-secondary sombra3" data-classinput="form-control inline" data-icon="&lt;span class='fa fa-upload mr-2 '&gt;&lt;/span&gt;" accept="application/pdf" required>
 							</div>
 						</div>
-                  <div class="col-12 col-md-3 br  bb bl">    <!-- Se -->
+                  <div class="col-12 col-md-3 br  bb bl">
 							<div class="form-group">
 								<label>Finalizar Tarea:</label>
 								<button type="submit" class="btn btn-primary btn-block "  id="finalizarOpcion" disabled>FINALIZAR</button>

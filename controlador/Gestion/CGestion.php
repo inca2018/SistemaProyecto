@@ -5,7 +5,7 @@
 	require_once "../../config/conexion.php";
    $gestion = new MGestion();
    $general = new MGeneral();
-	$recursos           = new Conexion();
+   $recursos = new Conexion();
 
 
 	$idGestion=isset($_POST["idGestion"])?limpiarCadena($_POST["idGestion"]):"";
@@ -386,7 +386,7 @@ function AccionDisponibilidad($reg){
             if ($_FILES["adjuntar_documento"]["name"] != '') {
                 $tipoFile = $_FILES['adjuntar_documento']['type'];
                 if ($tipoFile == "application/pdf") {
-                    $Documento =  "Tarea".$idTarea.".pdf";
+                    $Documento = "Tarea".$idTarea.".pdf";
                 } else {
                     $Documento      = null;
                     $rspta["Error"] = true;
@@ -395,7 +395,7 @@ function AccionDisponibilidad($reg){
             } else {
                 $Documento = null;
             }
-
+   //
 			$rspta['Finalizar']=$gestion->FinalizarTarea($idTarea,$Documento);
 
 			 if($Documento!=null)
