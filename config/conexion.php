@@ -69,7 +69,7 @@ class Conexion {
          $destination ='../../vista/DocumentoTarea/'.$nombre;
          $subida = move_uploaded_file($_FILES['adjuntar_documento']['tmp_name'], $destination);
          return $subida;
-      }
+      } // fwefe
    }
 
    public function upload_finContrato($idColaborador,$idContrato) {
